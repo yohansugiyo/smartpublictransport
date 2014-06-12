@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dip">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent" >
+
+        <EditText
+            android:id="@+id/fromEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:layout_toLeftOf="@+id/imageButtonGpsFrom"
+            android:hint="@string/from"
+            android:inputType="textNoSuggestions|textPostalAddress"
+            android:singleLine="true" >
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/imageButtonGpsFrom"
+            android:scaleType="fitCenter"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_toLeftOf="@+id/imageButtonMapPointFrom"
+            android:contentDescription="@string/my_location"
+            android:src="@drawable/ic_location" />
+
+        <ImageButton
+            android:id="@+id/imageButtonMapPointFrom"
+            android:scaleType="fitCenter"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/select_from_map"
+            android:src="@drawable/ic_map" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/toEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:layout_toLeftOf="@+id/imageButtonGpsTo"
+            android:hint="@string/to"
+            android:inputType="textNoSuggestions|textPostalAddress"
+            android:singleLine="true" >
+        </EditText>
+
+        <ImageButton
+            android:id="@+id/imageButtonGpsTo"
+            android:scaleType="fitCenter"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_toLeftOf="@+id/imageButtonMapPointTo"
+            android:contentDescription="@string/my_location"
+            android:src="@drawable/ic_location" />
+
+        <ImageButton
+            android:id="@+id/imageButtonMapPointTo"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:scaleType="fitCenter"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/select_from_map"
+            android:src="@drawable/ic_map" />
+    </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/regionSpinner"
+        android:prompt="@string/region"
+        android:entries="@array/region_list"
+        android:contentDescription="@string/region"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/findButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/find_it"
+            />
+
+</LinearLayout>
