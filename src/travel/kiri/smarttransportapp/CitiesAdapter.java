@@ -44,7 +44,7 @@ public class CitiesAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View v = inflater.inflate(android.R.layout.simple_list_item_single_choice, parent, false);
+		View v = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 		TextView tv = (TextView) v.findViewById(android.R.id.text1);
 		final String label = getItem(position) == null ? context.getResources().getString(R.string.autodetect) : cities.get(position).name;
 		tv.setText(label);

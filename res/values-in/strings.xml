@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="_not_found">"%s" tidak ditemukan!</string>
     <string name="autodetect">Lokasi saya</string>
     <string name="city">Kota</string>
     <string name="connection_error">Gangguan koneksi</string>

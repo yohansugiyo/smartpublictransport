@@ -327,7 +327,7 @@ public class DirectionActivity extends FragmentActivity implements
 		if (stepListView.getVisibility() == View.VISIBLE) {
 			mapView.setVisibility(View.VISIBLE);
 			stepListView.setVisibility(View.GONE);
-			toggleMapMenuItem.setIcon(R.drawable.ic_list);
+			toggleMapMenuItem.setIcon(R.drawable.ic_action_view_as_list);
 			if (map == null) {
 				Toast toast = Toast.makeText(getApplicationContext(),
 						R.string.map_not_available, Toast.LENGTH_LONG);
@@ -336,7 +336,7 @@ public class DirectionActivity extends FragmentActivity implements
 		} else {
 			mapView.setVisibility(View.GONE);
 			stepListView.setVisibility(View.VISIBLE);
-			toggleMapMenuItem.setIcon(R.drawable.ic_map);
+			toggleMapMenuItem.setIcon(R.drawable.ic_action_map);
 		}
 	}
 

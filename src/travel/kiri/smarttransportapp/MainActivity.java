@@ -184,19 +184,27 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 							}
 						}
 						pendingPlaceSearch++;
+						final String textQuery = endpoint.getEditTextRepresentation();
 						request.searchPlace(endpoint.getEditTextRepresentation(), regionCode, new SearchPlaceResponseHandler() {
 							@Override
 							public void searchPlaceResponseReceived(List<Place> places, List<String> attributions) {
-								// One place search has been completed
-								if (!cancelled) {
-									pendingPlaceSearch--;
-									endpointCopy.setPlaces(places);
-									if (pendingPlaceSearch == 0) {
-										loadingDialog.dismiss();
-										showPlaceOptionsPickDialog();
-									}
-								} else {
+								if (places.size() == 0) {
+									cancelled = true;
 									loadingDialog.dismiss();
+									Toast toast = Toast.makeText(getApplicationContext(), String.format(getString(R.string._not_found), textQuery), Toast.LENGTH_LONG);
+									toast.show();
+								} else {
+									// One place search has been completed
+									if (!cancelled) {
+										pendingPlaceSearch--;
+										endpointCopy.setPlaces(places);
+										if (pendingPlaceSearch == 0) {
+											loadingDialog.dismiss();
+											showPlaceOptionsPickDialog();
+										}
+									} else {
+										loadingDialog.dismiss();
+									}
 								}
 							}
 						});
