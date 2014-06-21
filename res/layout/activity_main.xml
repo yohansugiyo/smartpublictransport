@@ -3,40 +3,59 @@
     android:id="@+id/layout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_margin="10dip">
+    android:layout_margin="10dip"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="200dip"
+        android:layout_height="100dip"
+        android:layout_gravity="center"
+        android:contentDescription="@string/kirilogo"
+        android:src="@drawable/logo" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent" >
 
+        <TextView
+            android:id="@+id/fromTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/from"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
         <EditText
             android:id="@+id/fromEditText"
             android:layout_width="fill_parent"
             android:layout_height="48dip"
+            android:layout_below="@+id/fromTextView"
             android:layout_toLeftOf="@+id/imageButtonGpsFrom"
-            android:hint="@string/from"
+            android:hint="@string/egstasiun"
             android:inputType="textNoSuggestions|textPostalAddress"
             android:singleLine="true" >
         </EditText>
 
         <ImageButton
             android:id="@+id/imageButtonGpsFrom"
-            android:scaleType="fitCenter"
             android:layout_width="48dip"
             android:layout_height="48dip"
+            android:layout_alignTop="@+id/fromEditText"
             android:layout_toLeftOf="@+id/imageButtonMapPointFrom"
             android:contentDescription="@string/my_location"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_location" />
 
         <ImageButton
             android:id="@+id/imageButtonMapPointFrom"
-            android:scaleType="fitCenter"
             android:layout_width="48dip"
             android:layout_height="48dip"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/fromEditText"
             android:contentDescription="@string/select_from_map"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_map" />
     </RelativeLayout>
 
@@ -44,48 +63,58 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
+        <TextView
+            android:id="@+id/toTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/to"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
         <EditText
             android:id="@+id/toEditText"
             android:layout_width="fill_parent"
             android:layout_height="48dip"
+            android:layout_below="@+id/toTextView"
             android:layout_toLeftOf="@+id/imageButtonGpsTo"
-            android:hint="@string/to"
+            android:hint="@string/egmonasjakarta"
             android:inputType="textNoSuggestions|textPostalAddress"
             android:singleLine="true" >
         </EditText>
 
         <ImageButton
             android:id="@+id/imageButtonGpsTo"
-            android:scaleType="fitCenter"
             android:layout_width="48dip"
             android:layout_height="48dip"
+            android:layout_alignTop="@+id/toEditText"
             android:layout_toLeftOf="@+id/imageButtonMapPointTo"
             android:contentDescription="@string/my_location"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_location" />
 
         <ImageButton
             android:id="@+id/imageButtonMapPointTo"
             android:layout_width="48dip"
             android:layout_height="48dip"
-            android:scaleType="fitCenter"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/toEditText"
             android:contentDescription="@string/select_from_map"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_map" />
     </RelativeLayout>
 
     <Spinner
         android:id="@+id/regionSpinner"
-        android:prompt="@string/region"
-        android:entries="@array/region_list"
-        android:contentDescription="@string/region"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/region"
+        android:entries="@array/region_list"
+        android:prompt="@string/region" />
 
-        <Button
-            android:id="@+id/findButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/find_it"
-            />
+    <Button
+        android:id="@+id/findButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/find_it" />
 
 </LinearLayout>

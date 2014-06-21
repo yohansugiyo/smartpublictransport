@@ -9,9 +9,11 @@
     <string name="connection_error">Connection error</string>
     <string name="directions">Directions</string>
     <string name="directions_to">Directions to %s</string>
+    <string name="egstasiun">e.g. Stasiun</string>
+    <string name="egmonasjakarta">e.g. Monas, Jakarta</string>
     <string name="find_it">Find it!</string>
     <string name="fill_both_textboxes">Fill both textboxes!</string>
-    <string name="from">From</string>
+    <string name="from">From:</string>
     <string name="from_">From&#8230;</string>
     <string name="from_here">From here</string>
     <string name="iso639code">en</string>
@@ -20,6 +22,7 @@
     <string name="my_location">My Location</string>
     <string name="next">Next</string>
     <string name="gps_not_ready">Please wait until location is determined</string>
+    <string name="kirilogo">Logo KIRI</string>
     <string name="pay_subscription">Support us and remove ad by paying subscription fee</string>
     <string name="pick_location">Pick Location</string>
     <string name="please_wait">Please wait&#8230;</string>
@@ -34,7 +37,7 @@
     <string name="step_icon">Step Icon</string>
     <string name="subscription">Subscription</string>
     <string name="switchmaplist">Switch map and list view</string>
-    <string name="to">To</string>
+    <string name="to">To:</string>
     <string name="to_">To&#8230;</string>
     <string name="to_here">To here</string>
 
