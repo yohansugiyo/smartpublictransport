@@ -56,7 +56,7 @@
             android:layout_alignTop="@+id/fromEditText"
             android:contentDescription="@string/select_from_map"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_map" />
+            android:src="@drawable/ic_action_map" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -100,7 +100,7 @@
             android:layout_alignTop="@+id/toEditText"
             android:contentDescription="@string/select_from_map"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_map" />
+            android:src="@drawable/ic_action_map" />
     </RelativeLayout>
 
     <Spinner
