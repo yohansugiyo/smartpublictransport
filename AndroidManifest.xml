@@ -35,9 +35,7 @@
 
         <activity
             android:name="travel.kiri.smarttransportapp.MainActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,8 +45,7 @@
         <activity
             android:name="travel.kiri.smarttransportapp.SelectOnMapActivity"
             android:label="@string/pick_location"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -58,14 +55,12 @@
         <activity
             android:name="travel.kiri.smarttransportapp.DirectionActivity"
             android:label="@string/directions"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="travel.kiri.smarttransportapp.ActivityAbout"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light" >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -82,8 +77,7 @@
 
         <activity
             android:name="travel.kiri.smarttransportapp.SettingsActivity"
-            android:label="@string/settings"
-            android:theme="@style/Theme.AppCompat.Light">
+            android:label="@string/settings" >
         </activity>
     </application>
 
