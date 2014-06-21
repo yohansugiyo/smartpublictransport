@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="_not_found">"%s" tidak ditemukan!</string>
+    <string name="autodetect">Lokasi saya</string>
+    <string name="city">Kota</string>
     <string name="connection_error">Gangguan koneksi</string>
     <string name="determining_location">Mencari lokasi&#8230;</string>
     <string name="directions_to">Rute ke %s</string>
@@ -16,7 +19,7 @@
     <string name="next">Berikut</string>
     <string name="gps_not_ready">Mohon tunggu sampai lokasi ditemukan</string>
     <string name="kirilogo">KIRI Logo</string>
-   	<string name="pay_subscription">Dukung kami dan hilangkan iklan dengan membayar biaya langganan</string>
+    <string name="pay_subscription">Dukung kami dan hilangkan iklan dengan membayar biaya langganan</string>
     <string name="please_wait">Mohon tunggu&#8230;</string>
     <string name="previous">Sebelum</string>
     <string name="region">Kota</string>
@@ -30,4 +33,6 @@
     <string name="to">Ke:</string>
     <string name="to_">Ke&#8230;</string>
     <string name="to_here">Ke sini</string>
+    <string name="you_are_in">Anda berada di %s</string>
+
 </resources>

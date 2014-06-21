@@ -103,13 +103,11 @@
             android:src="@drawable/ic_action_map" />
     </RelativeLayout>
 
-    <Spinner
-        android:id="@+id/regionSpinner"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/regionTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/region"
-        android:entries="@array/region_list"
-        android:prompt="@string/region" />
+        android:text="@string/you_are_in" />
 
     <Button
         android:id="@+id/findButton"
