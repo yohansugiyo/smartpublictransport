@@ -211,25 +211,12 @@ public class LocationFinder implements LocationSource {
 	public void deactivate() {
 		googleMapListener = null;
 	}
-
-	/**
-	 * Saves the current location to permanent storage.
-	 */
-	public void saveLocation() {
-		if (currentLocation != null) {
-			SharedPreferences.Editor editor = locationSaver.edit();
-			editor.putString(PREF_CURRENT_LOCATION, LocationUtilities.locationToString(currentLocation));
-			editor.commit();
+	
+	public Location getLastKnownLocation() {
+		Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		if (lastKnownLocation == null) {
+			lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
-	}
-
-	/**
-	 * Try to load the current location from permanent storage.
-	 */
-	public void loadLocation() {
-		String currentLocationString = locationSaver.getString(PREF_CURRENT_LOCATION, null);
-		if (currentLocationString != null) {
-			this.currentLocation = LocationUtilities.createLocation(currentLocationString);
-		}
+		return lastKnownLocation;
 	}
 }

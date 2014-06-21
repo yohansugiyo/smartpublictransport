@@ -180,7 +180,12 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 							if (cityDetected != null) {
 								regionCode = cityDetected.code;
 							} else {
-								regionCode = City.CITIES[0].code;
+								Location lastLocation = LocationFinder.getInstance().getLastKnownLocation();
+								if (lastLocation == null) {
+									regionCode = City.CITIES[0].code;
+								} else {
+									regionCode = City.findNearestCity(lastLocation).code;
+								}
 							}
 						}
 						pendingPlaceSearch++;
@@ -230,6 +235,7 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 					Object selected = adapter.getItem(which);
 					if (selected == null) {
 						cityDetected = null;
+						citySelected = null;
 						updateRegionTextView(null);
 						saveStringPreference(PREF_REGION, null);
 					} else {
@@ -436,13 +442,7 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 	@Override
 	public void onLocationChanged(Location location) {
 		if (cityDetected == null) {
-			City nearestCity = null;
-			for (City city: City.CITIES) {
-				if (nearestCity == null || location.distanceTo(city.location) < location.distanceTo(nearestCity.location)) {
-					nearestCity = city;
-				}
-			}
-			cityDetected = nearestCity;
+			cityDetected = City.findNearestCity(location);
 			if (citySelected == null) {
 				updateRegionTextView(cityDetected);
 			}
