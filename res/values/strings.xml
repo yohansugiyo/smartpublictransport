@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- FIXME: Replace admob_id with yours (otherwise your app will make me richer ;) -->
 	<string name="_km_tracked">%.3f km tracked</string>
 	<string name="about">About</string>
     <string name="admob_id">a151bfc571eb75d</string>
     <string name="app_name">Public Transport</string>
+    <string name="autodetect">Auto-detect</string>
+    <string name="city">City</string>
     <string name="connection_error">Connection error</string>
     <string name="directions">Directions</string>
     <string name="directions_to">Directions to %s</string>
@@ -40,6 +40,7 @@
     <string name="to">To:</string>
     <string name="to_">To&#8230;</string>
     <string name="to_here">To here</string>
+    <string name="you_are_in">You are in %s</string>
 
     <string-array name="region_list">
         <item>Bandung</item>

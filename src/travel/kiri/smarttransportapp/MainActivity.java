@@ -3,6 +3,7 @@ package travel.kiri.smarttransportapp;
 import java.util.ArrayList;
 import java.util.List;
 
+import travel.kiri.smarttransportapp.model.City;
 import travel.kiri.smarttransportapp.model.LocationFinder;
 import travel.kiri.smarttransportapp.model.MyLocationPoint;
 import travel.kiri.smarttransportapp.model.Place;
@@ -22,8 +23,10 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,16 +34,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener, ErrorReporter, OnCancelListener,
-		DialogInterface.OnClickListener, OnItemSelectedListener {
+		DialogInterface.OnClickListener, LocationListener {
 
 	private static final String PREF_REGION = "region";
 	
@@ -59,8 +60,7 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 	
 	/** The single loading dialog instance for this activity. */
 	private LoadingDialog loadingDialog;
-
-	private Spinner regionSpinner;
+	private TextView regionTextView;
 	private Button findButton;
 
 	/** Keeps track of place search request not completed. */
@@ -74,6 +74,11 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 	 * pending operations should not continue.
 	 */
 	private boolean cancelled;
+	
+	/** City as detected by the GPS. Null means undetected yet*/
+	private City cityDetected = null;
+	/** City selected manually, null means not selected yet (from detection). */
+	private City citySelected = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +103,7 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 		endpointSelectOnMapButton[ENDPOINT_FINISH] = (ImageButton) findViewById(R.id.imageButtonMapPointTo);		
 		endpointEditText[ENDPOINT_START] = (EditText) findViewById(R.id.fromEditText);
 		endpointEditText[ENDPOINT_FINISH] = (EditText) findViewById(R.id.toEditText);
-		regionSpinner = (Spinner) findViewById(R.id.regionSpinner);
+		regionTextView = (TextView) findViewById(R.id.regionTextView);
 		findButton = (Button) findViewById(R.id.findButton);
 
 		for (int i = 0; i < endpointEditText.length; i++) {
@@ -124,8 +129,12 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 				}
 			};
 		}
-		regionSpinner.setSelection(getIntegerPreference(PREF_REGION));
-		regionSpinner.setOnItemSelectedListener(this);
+		LocationFinder locationFinder = LocationFinder.getInstance();
+		locationFinder.startLocationDetection();
+		locationFinder.addLocationListener(this);
+		citySelected = City.getCityFromCode(getStringPreference(PREF_REGION));
+		updateRegionTextView(citySelected);
+		regionTextView.setOnClickListener(this);
 		findButton.setOnClickListener(this);
 	}
 
@@ -148,7 +157,6 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 			}
 			// Check for select on map button
 			if (sender == endpointSelectOnMapButton[i]) {
-				LocationFinder.getInstance().startLocationDetection();				
 				endpointEditText[i].removeTextChangedListener(textQueryReverter[i]);
 				Intent intent = new Intent(this, SelectOnMapActivity.class);
 				intent.putExtra(SelectOnMapActivity.EXTRA_ENDPOINT_TYPE, i == ENDPOINT_START ? CicaheumLedengProtocol.PROTO_START : CicaheumLedengProtocol.PROTO_FINISH);
@@ -165,7 +173,16 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 						if (!adKeywords.contains(endpoint.getEditTextRepresentation())) {
 							adKeywords.add(endpoint.getEditTextRepresentation());
 						}
-						String regionCode = getResources().getStringArray(R.array.regioncode_list)[regionSpinner.getSelectedItemPosition()];
+						String regionCode;
+						if (citySelected != null) {
+							regionCode = citySelected.code;
+						} else {
+							if (cityDetected != null) {
+								regionCode = cityDetected.code;
+							} else {
+								regionCode = City.CITIES[0].code;
+							}
+						}
 						pendingPlaceSearch++;
 						request.searchPlace(endpoint.getEditTextRepresentation(), regionCode, new SearchPlaceResponseHandler() {
 							@Override
@@ -194,6 +211,28 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 				Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.fill_both_textboxes), Toast.LENGTH_SHORT);
 				toast.show();				
 			}
+		} else if (sender == regionTextView) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.city);
+			final CitiesAdapter adapter = new CitiesAdapter(this);
+			builder.setAdapter(adapter, new AlertDialog.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					Object selected = adapter.getItem(which);
+					if (selected == null) {
+						cityDetected = null;
+						updateRegionTextView(null);
+						saveStringPreference(PREF_REGION, null);
+					} else {
+						citySelected = (City)selected;
+						updateRegionTextView(citySelected);
+						saveStringPreference(PREF_REGION, citySelected.code);
+					}
+				}
+			});
+			AlertDialog dialog = builder.create();
+			dialog.show();
 		}
 	}
 
@@ -342,37 +381,37 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 	}
 	
 	/**
-	 * Saves an integer to permanent storage
+	 * Saves a string to permanent storage
 	 * @param key the variable name
-	 * @param value the value to store
+	 * @param value the value to store or null to erase.
 	 */
-	private void saveIntegerPreference(String key, int value) {
+	private void saveStringPreference(String key, String value) {
 		SharedPreferences settings = getSharedPreferences(this.getClass().getName(), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putInt(key, value);
+		if (value == null) {
+			editor.remove(key);
+		} else {
+			editor.putString(key, value);
+		}
 		editor.commit();
 	}
 	
 	/**
-	 * Retrieves integer from permanent storage
+	 * Retrieves String from permanent storage
 	 * @param key the variable name
-	 * @return the value, or 0 if not set before.
+	 * @return the value, or null if not set before.
 	 */
-	private int getIntegerPreference(String key) {
+	private String getStringPreference(String key) {
 		SharedPreferences settings = getSharedPreferences(this.getClass().getName(), Context.MODE_PRIVATE);
-		return settings.getInt(key, 0);
+		try {
+			return settings.getString(key, null);
+		} catch (ClassCastException cce) {
+			// Fix for existing configuration
+			saveStringPreference(key, null);
+			return null;
+		}
 	}
 
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position,
-			long id) {
-		saveIntegerPreference(PREF_REGION, position);
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-		// void
-	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -384,5 +423,41 @@ public class MainActivity extends Activity implements OnClickListener, ErrorRepo
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		if (cityDetected == null) {
+			City nearestCity = null;
+			for (City city: City.CITIES) {
+				if (nearestCity == null || location.distanceTo(city.location) < location.distanceTo(nearestCity.location)) {
+					nearestCity = city;
+				}
+			}
+			cityDetected = nearestCity;
+			if (citySelected == null) {
+				updateRegionTextView(cityDetected);
+			}
+		}
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// void
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// void
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// void
+	}
+	
+	private void updateRegionTextView(City city) {
+		final String youAreInTemplate = getResources().getString(R.string.you_are_in);
+		regionTextView.setText(Html.fromHtml(String.format(youAreInTemplate, city == null ? "..." : ("<a href=\"#\">" + city.name + "</a>"))));
 	}
 }
