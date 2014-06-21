@@ -79,6 +79,10 @@
             android:name="travel.kiri.smarttransportapp.SettingsActivity"
             android:label="@string/settings" >
         </activity>
+        <activity
+            android:name="travel.kiri.smarttransportapp.AboutActivity"
+            android:label="@string/about" >
+        </activity>
     </application>
 
 </manifest>

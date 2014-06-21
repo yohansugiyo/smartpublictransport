@@ -7,15 +7,13 @@ import java.util.Map;
 
 import travel.kiri.smarttransportapp.model.StatisticCounter;
 import android.annotation.TargetApi;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -81,12 +79,17 @@ public class SettingsActivity extends ActionBarActivity implements OnItemClickLi
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		switch (position) {
+		case 0:
+			Intent intent = new Intent(this, AboutActivity.class);
+			startActivity(intent);
+			break;
 		case 1:
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
 			sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(getResources().getString(R.string.itracked), 0.001 * StatisticCounter.getInstance().getTotalDistance()));
 			sendIntent.setType("text/plain");
 			startActivity(sendIntent);
+			break;
 		}
 	}
 }
