@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/layout_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
@@ -12,16 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        app:dragView="@+id/btn_slide"
+        app:dragView="@+id/tv_selected_step"
         app:overlay="true"
-        app:panelHeight="1dp"
+        app:panelHeight="100dp"
         app:shadowHeight="4dp" >
 
         <RelativeLayout
             android:id="@+id/mapview"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="visible" >
 
             <fragment
@@ -34,7 +32,6 @@
                 android:id="@+id/layout_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/mapfragment"
                 android:layout_centerHorizontal="true"
                 android:background="@android:color/transparent"
                 android:orientation="horizontal" >
@@ -60,13 +57,31 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/steplistview"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1"
-            android:visibility="gone" >
-        </ListView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_selected_step"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="#c000"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="center_vertical"
+                android:lines="3"
+                android:padding="10dp"
+                android:text="Direction from x to y"
+                android:textColor="#FFF"
+                android:textSize="16sp" />
+
+            <ListView
+                android:id="@+id/steplistview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#9000" >
+            </ListView>
+        </LinearLayout>
 
         <!-- <com.google.android.gms.ads.AdView -->
         <!-- android:id="@+id/admob" -->

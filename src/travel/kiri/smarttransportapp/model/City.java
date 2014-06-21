@@ -29,4 +29,14 @@ public class City {
 		}
 		return null;
 	}
+	
+	public static City findNearestCity(Location location) {
+		City nearestCity = null;
+		for (City city: City.CITIES) {
+			if (nearestCity == null || location.distanceTo(city.location) < location.distanceTo(nearestCity.location)) {
+				nearestCity = city;
+			}
+		}
+		return nearestCity;
+	}
 }

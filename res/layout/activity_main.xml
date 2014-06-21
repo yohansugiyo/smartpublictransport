@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="@string/from"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/fromEditText"
@@ -61,7 +62,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp" >
 
         <TextView
             android:id="@+id/toTextView"
@@ -69,7 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:text="@string/to"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/toEditText"
@@ -130,6 +133,7 @@
         android:layout_marginBottom="20dp"
         android:drawableLeft="@drawable/ic_action_settings"
         android:gravity="center"
-        android:text="Settings" />
+        android:text="Settings"
+        android:textSize="16sp" />
 
 </LinearLayout>

@@ -179,6 +179,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 					startActivityForResult(intent, i);
 				}
 			}
+
 			if (sender == findButton) {
 				if (validateEmptyEditText(endpointEditText) == null) {
 					cancelled = false;
@@ -198,48 +199,57 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 								if (cityDetected != null) {
 									regionCode = cityDetected.code;
 								} else {
-									regionCode = City.CITIES[0].code;
+									Location lastLocation = LocationFinder
+											.getInstance()
+											.getLastKnownLocation();
+									if (lastLocation == null) {
+										regionCode = City.CITIES[0].code;
+									} else {
+										regionCode = City
+												.findNearestCity(lastLocation).code;
+									}
 								}
-							}
-							pendingPlaceSearch++;
-							final String textQuery = endpoint
-									.getEditTextRepresentation();
-							request.searchPlace(
-									endpoint.getEditTextRepresentation(),
-									regionCode,
-									new SearchPlaceResponseHandler() {
-										@Override
-										public void searchPlaceResponseReceived(
-												List<Place> places,
-												List<String> attributions) {
-											if (places.size() == 0) {
-												cancelled = true;
-												loadingDialog.dismiss();
-												Toast toast = Toast
-														.makeText(
-																getApplicationContext(),
-																String.format(
-																		getString(R.string._not_found),
-																		textQuery),
-																Toast.LENGTH_LONG);
-												toast.show();
-											} else {
-												// One place search has been
-												// completed
-												if (!cancelled) {
-													pendingPlaceSearch--;
-													endpointCopy
-															.setPlaces(places);
-													if (pendingPlaceSearch == 0) {
-														loadingDialog.dismiss();
-														showPlaceOptionsPickDialog();
-													}
-												} else {
+								pendingPlaceSearch++;
+								final String textQuery = endpoint
+										.getEditTextRepresentation();
+								request.searchPlace(
+										endpoint.getEditTextRepresentation(),
+										regionCode,
+										new SearchPlaceResponseHandler() {
+											@Override
+											public void searchPlaceResponseReceived(
+													List<Place> places,
+													List<String> attributions) {
+												if (places.size() == 0) {
+													cancelled = true;
 													loadingDialog.dismiss();
+													Toast toast = Toast
+															.makeText(
+																	getApplicationContext(),
+																	String.format(
+																			getString(R.string._not_found),
+																			textQuery),
+																	Toast.LENGTH_LONG);
+													toast.show();
+												} else {
+													// One place search has been
+													// completed
+													if (!cancelled) {
+														pendingPlaceSearch--;
+														endpointCopy
+																.setPlaces(places);
+														if (pendingPlaceSearch == 0) {
+															loadingDialog
+																	.dismiss();
+															showPlaceOptionsPickDialog();
+														}
+													} else {
+														loadingDialog.dismiss();
+													}
 												}
 											}
-										}
-									});
+										});
+							}
 						}
 					}
 					if (pendingPlaceSearch == 0) {
@@ -264,17 +274,16 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 						Object selected = adapter.getItem(which);
 						if (selected == null) {
 							cityDetected = null;
+							citySelected = null;
 							updateRegionTextView(null);
 							saveStringPreference(PREF_REGION, null);
+
 						} else {
-							citySelected = (City) selected;
-							updateRegionTextView(citySelected);
-							saveStringPreference(PREF_REGION, citySelected.code);
+							loadingDialog.show();
 						}
+
 					}
 				});
-				AlertDialog dialog = builder.create();
-				dialog.show();
 			}
 		}
 	}
@@ -316,17 +325,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 							loadingDialog.dismiss();
 							if (!cancelled) {
 								resetUIState();
-								Intent intent = new Intent(activity,
-										DirectionActivity.class);
-								intent.putExtra(
-										DirectionActivity.EXTRA_DESTINATION,
-										finish.getEditTextRepresentation());
-								intent.putExtra(DirectionActivity.EXTRA_ROUTE,
-										route);
-								intent.putExtra(
-										DirectionActivity.EXTRA_ADKEYWORDS,
-										adKeywords);
-								startActivity(intent);
+								DirectionActivity.startThisActivity(activity,
+										start.getEditTextRepresentation(),
+										finish.getEditTextRepresentation(),
+										adKeywords, route);
 							}
 						}
 					});
@@ -495,15 +497,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	@Override
 	public void onLocationChanged(Location location) {
 		if (cityDetected == null) {
-			City nearestCity = null;
-			for (City city : City.CITIES) {
-				if (nearestCity == null
-						|| location.distanceTo(city.location) < location
-								.distanceTo(nearestCity.location)) {
-					nearestCity = city;
-				}
-			}
-			cityDetected = nearestCity;
+			cityDetected = City.findNearestCity(location);
 			if (citySelected == null) {
 				updateRegionTextView(cityDetected);
 			}
