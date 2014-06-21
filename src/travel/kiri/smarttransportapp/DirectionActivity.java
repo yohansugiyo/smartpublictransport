@@ -13,7 +13,9 @@ import travel.kiri.smarttransportapp.model.protocol.MarkerOptionsResponseHandler
 import travel.kiri.smarttransportapp.view.SlidingUpPanelLayout;
 import travel.kiri.smarttransportapp.view.SlidingUpPanelLayout.PanelSlideListener;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -375,7 +377,7 @@ public class DirectionActivity extends ActionBarActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			finish();
+			onBackPressed();
 			return true;
 		case R.id.menu_previous:
 			return true;
@@ -558,10 +560,6 @@ public class DirectionActivity extends ActionBarActivity implements
 		if (lastLocation != null) {
 			float distance = lastLocation.distanceTo(currentLocation);
 			StatisticCounter.getInstance().addTotalDistance(distance);
-			// TODO just a debug
-			Toast toast = Toast.makeText(this, "distance=" + distance,
-					Toast.LENGTH_SHORT);
-			toast.show();
 		}
 		lastLocation = currentLocation;
 	}
@@ -589,5 +587,19 @@ public class DirectionActivity extends ActionBarActivity implements
 		intent.putExtra(EXTRA_ADKEYWORDS, adKeyword);
 		intent.putExtra(EXTRA_ROUTE, route);
 		ctx.startActivity(intent);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.stop_navigation_);
+		builder.setPositiveButton(R.string.yes, new AlertDialog.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				finish();
+			}
+		});
+		builder.setNegativeButton(R.string.no, null);
+		builder.create().show();
 	}
 }
