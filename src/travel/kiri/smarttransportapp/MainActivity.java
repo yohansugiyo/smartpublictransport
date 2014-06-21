@@ -144,6 +144,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		updateRegionTextView(citySelected);
 		regionTextView.setOnClickListener(this);
 		findButton.setOnClickListener(this);
+		
+		// Quick find
+		this.onClick(endpointMyLocationButton[ENDPOINT_START]);
+		endpointEditText[ENDPOINT_FINISH].requestFocus();
 	}
 
 	// @Override
