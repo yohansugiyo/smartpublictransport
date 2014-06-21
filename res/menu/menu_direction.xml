@@ -1,7 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- <item -->
+    <!-- android:id="@+id/menu_togglemap" -->
+    <!-- android:icon="@drawable/ic_action_view_as_list" -->
+    <!-- android:showAsAction="ifRoom" -->
+    <!-- android:title="@string/switchmaplist"/> -->
     <item
-        android:id="@+id/menu_togglemap"
-        android:icon="@drawable/ic_action_view_as_list"
-        android:showAsAction="ifRoom"
-        android:title="@string/switchmaplist"/>
+        android:id="@+id/menu_previous"
+        android:icon="@drawable/ic_action_previous_item"
+        android:showAsAction="always|withText"
+        android:title="Previous"/>
+    <item
+        android:id="@+id/menu_next"
+        android:icon="@drawable/ic_action_next_item"
+        android:showAsAction="always|withText"
+        android:title="Next"/>
+
 </menu>

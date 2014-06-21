@@ -45,4 +45,6 @@
     <string name="to_">To&#8230;</string>
     <string name="to_here">To here</string>
     <string name="you_are_in">You are in %s</string>
+    <string name="route_from_x_to_y">Route from %1$s to %2$s</string>
+
 </resources>

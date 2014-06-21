@@ -10,6 +10,7 @@ import travel.kiri.smarttransportapp.model.StatisticCounter;
 import travel.kiri.smarttransportapp.model.protocol.CicaheumLedengProtocol;
 import travel.kiri.smarttransportapp.model.protocol.ImageResponseHandler;
 import travel.kiri.smarttransportapp.model.protocol.MarkerOptionsResponseHandler;
+import travel.kiri.smarttransportapp.view.SlidingUpPanelLayout;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -20,11 +21,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,13 +52,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class DirectionActivity extends FragmentActivity implements
+public class DirectionActivity extends ActionBarActivity implements
 		OnClickListener, OnInfoWindowClickListener, OnItemClickListener,
 		OnMarkerClickListener, ErrorReporter, LocationListener {
 
 	public static final String EXTRA_ROUTE = "travel.kiri.smarttransportapp.intent.extra.route";
 	public static final String EXTRA_ADKEYWORDS = "travel.kiri.smarttransportapp.intent.extra.adkeywords";
 	public static final String EXTRA_DESTINATION = "travel.kiri.smarttransportapp.intent.extra.destination";
+	public static final String EXTRA_FROM = "travel.kiri.smarttransportapp.intent.extra.from";
 
 	public static final float DEFAULT_ZOOM = 12;
 	public static final float FOCUS_ZOOM = 18;
@@ -71,6 +71,8 @@ public class DirectionActivity extends FragmentActivity implements
 
 	private static int BOUNDS_PADDING = 70;
 
+	SlidingUpPanelLayout slidingUpLayout;
+
 	private GoogleMap map;
 	private Route route;
 	private List<Marker> markers;
@@ -78,6 +80,7 @@ public class DirectionActivity extends FragmentActivity implements
 	private Integer selectedMarker;
 	private LatLngBounds allPointsBounds;
 
+	private TextView tvSelectedStep;
 	private View stepListView;
 	private View mapView;
 	private ImageButton previousImageButton;
@@ -90,6 +93,8 @@ public class DirectionActivity extends FragmentActivity implements
 	private LocationFinder locationFinder;
 
 	private Location lastLocation = null;
+	private String from;
+	private String destination;
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	protected void setupActionBar() {
@@ -109,10 +114,12 @@ public class DirectionActivity extends FragmentActivity implements
 
 		setupActionBar();
 
+		tvSelectedStep = (TextView) findViewById(R.id.tv_selected_step);
 		stepListView = findViewById(R.id.steplistview);
 		mapView = findViewById(R.id.mapview);
 		previousImageButton = (ImageButton) findViewById(R.id.imageButtonPrevious);
 		nextImageButton = (ImageButton) findViewById(R.id.imageButtonNext);
+		slidingUpLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
 		request = new CicaheumLedengProtocol(this, this);
 		resources = getResources();
@@ -122,13 +129,16 @@ public class DirectionActivity extends FragmentActivity implements
 
 		Intent intent = getIntent();
 		route = intent.getParcelableExtra(EXTRA_ROUTE);
-		final String destination = intent.getStringExtra(EXTRA_DESTINATION);
+		destination = intent.getStringExtra(EXTRA_DESTINATION);
+		from = intent.getStringExtra(EXTRA_FROM);
 		adKeywords = intent.getStringArrayListExtra(EXTRA_ADKEYWORDS);
 
 		// Setup list
 		ListView stepListView = (ListView) findViewById(R.id.steplistview);
 		stepListView.setAdapter(new RouteAdapter(this, route, this));
 		stepListView.setOnItemClickListener(this);
+
+		slidingUpLayout.setAnchorPoint(0.6F);
 
 		// Initialize map
 		map = ((SupportMapFragment) getSupportFragmentManager()
@@ -140,6 +150,7 @@ public class DirectionActivity extends FragmentActivity implements
 					LayoutInflater.from(this)));
 			map.setOnInfoWindowClickListener(this);
 			map.setOnMarkerClickListener(this);
+			map.getUiSettings().setZoomControlsEnabled(false);
 
 			previousImageButton.setOnClickListener(this);
 			nextImageButton.setOnClickListener(this);
@@ -254,13 +265,13 @@ public class DirectionActivity extends FragmentActivity implements
 		super.onDestroy();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_direction, menu);
-		toggleMapMenuItem = menu.findItem(R.id.menu_togglemap);
-		return true;
-	}
+	// @Override
+	// public boolean onCreateOptionsMenu(Menu menu) {
+	// MenuInflater inflater = getMenuInflater();
+	// inflater.inflate(R.menu.menu_direction, menu);
+	// // toggleMapMenuItem = menu.findItem(R.id.menu_togglemap);
+	// return true;
+	// }
 
 	@Override
 	public void onClick(View sender) {
@@ -300,10 +311,13 @@ public class DirectionActivity extends FragmentActivity implements
 			if (selectedMarker == null) {
 				cameraUpdate = CameraUpdateFactory.newLatLngBounds(
 						allPointsBounds, BOUNDS_PADDING);
+				initSelectedStep(null, null);
 			} else {
 				cameraUpdate = CameraUpdateFactory.newLatLngZoom(
 						markers.get(selectedMarker).getPosition(), FOCUS_ZOOM);
 				markers.get(selectedMarker).showInfoWindow();
+				initSelectedStep(markers.get(selectedMarker).getTitle(),
+						markers.get(selectedMarker).getSnippet());
 			}
 			map.animateCamera(cameraUpdate);
 		}
@@ -315,9 +329,13 @@ public class DirectionActivity extends FragmentActivity implements
 		case android.R.id.home:
 			finish();
 			return true;
-		case R.id.menu_togglemap:
-			toggleMapAndList();
+		case R.id.menu_previous:
 			return true;
+		case R.id.menu_next:
+			return true;
+			// case R.id.menu_togglemap:
+			// toggleMapAndList();
+			// return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -446,13 +464,17 @@ public class DirectionActivity extends FragmentActivity implements
 	@Override
 	public void onInfoWindowClick(Marker marker) {
 		// Switch to list if any of info window is clicked.
-		toggleMapAndList();
+		// toggleMapAndList();
+		// TODO set text
 	}
 
 	@Override
-	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+	public void onItemClick(AdapterView<?> adapter, View v, int position,
+			long id) {
 		// Switch to map if any of the item list is clicked.
-		toggleMapAndList();
+		// toggleMapAndList();
+		// TODO set marker popup
+		markers.get(position).showInfoWindow();
 	}
 
 	@Override
@@ -461,7 +483,18 @@ public class DirectionActivity extends FragmentActivity implements
 		if (index != -1) {
 			selectedMarker = index;
 		}
+		initSelectedStep(marker.getTitle(), marker.getSnippet());
 		return false;
+	}
+
+	private void initSelectedStep(String txt1, String txt2) {
+		if (txt1 == null && txt2 == null) {
+			tvSelectedStep.setText(String.format(
+					getString(R.string.route_from_x_to_y), from, destination));
+		} else {
+			tvSelectedStep.setText(txt1 + ": " + txt2);
+		}
+
 	}
 
 	@Override
@@ -492,4 +525,13 @@ public class DirectionActivity extends FragmentActivity implements
 		// void
 	}
 
+	public static void startThisActivity(Context ctx, String from,
+			String destination, ArrayList<String> adKeyword, Route route) {
+		Intent intent = new Intent(ctx, DirectionActivity.class);
+		intent.putExtra(EXTRA_FROM, from);
+		intent.putExtra(EXTRA_DESTINATION, destination);
+		intent.putExtra(EXTRA_ADKEYWORDS, adKeyword);
+		intent.putExtra(EXTRA_ROUTE, route);
+		ctx.startActivity(intent);
+	}
 }

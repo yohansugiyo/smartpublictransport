@@ -329,17 +329,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 							loadingDialog.dismiss();
 							if (!cancelled) {
 								resetUIState();
-								Intent intent = new Intent(activity,
-										DirectionActivity.class);
-								intent.putExtra(
-										DirectionActivity.EXTRA_DESTINATION,
-										finish.getEditTextRepresentation());
-								intent.putExtra(DirectionActivity.EXTRA_ROUTE,
-										route);
-								intent.putExtra(
-										DirectionActivity.EXTRA_ADKEYWORDS,
-										adKeywords);
-								startActivity(intent);
+								DirectionActivity.startThisActivity(activity,
+										start.getEditTextRepresentation(),
+										finish.getEditTextRepresentation(),
+										adKeywords, route);
 							}
 						}
 					});
