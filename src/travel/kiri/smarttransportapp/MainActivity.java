@@ -284,6 +284,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 
 					}
 				});
+				AlertDialog dialog = builder.create();
+				dialog.show();
 			}
 		}
 	}
