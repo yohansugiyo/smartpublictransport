@@ -88,6 +88,7 @@
                 android:id="@+id/steplistview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:choiceMode="singleChoice"
                 android:clickable="true" >
             </ListView>
         </LinearLayout>

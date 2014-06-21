@@ -127,12 +127,6 @@ public class DirectionActivity extends ActionBarActivity implements
 		nextImageButton = (ImageButton) findViewById(R.id.imageButtonNext);
 		slidingUpLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 
-		request = new CicaheumLedengProtocol(this, this);
-		resources = getResources();
-		locationFinder = LocationFinder.getInstance();
-		locationFinder.addLocationListener(this);
-		locationFinder.startLocationDetection();
-
 		Intent intent = getIntent();
 		route = intent.getParcelableExtra(EXTRA_ROUTE);
 		destination = intent.getStringExtra(EXTRA_DESTINATION);
@@ -140,25 +134,29 @@ public class DirectionActivity extends ActionBarActivity implements
 		adKeywords = intent.getStringArrayListExtra(EXTRA_ADKEYWORDS);
 
 		// Setup list
-		stepListView = (ListView) findViewById(R.id.steplistview);
 		stepListView.setAdapter(new RouteAdapter(this, route, this));
 		stepListView.setOnItemClickListener(this);
+
+		request = new CicaheumLedengProtocol(this, this);
+		resources = getResources();
+		locationFinder = LocationFinder.getInstance();
+		locationFinder.addLocationListener(this);
+		locationFinder.startLocationDetection();
 
 		slidingUpLayout.setAnchorPoint(0.4F);
 		slidingUpLayout.setPanelSlideListener(new PanelSlideListener() {
 
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {
-
+				stepListView.setLayoutParams(new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT, vRoot
+								.getHeight()
+								- tvSelectedStep.getHeight()
+								- panel.getTop()));
 			}
 
 			@Override
 			public void onPanelExpanded(View panel) {
-				// mapView.setLayoutParams(new
-				// SlidingUpPanelLayout.LayoutParams(
-				// SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, panel
-				// .getTop()));
-
 				stepListView.setLayoutParams(new LinearLayout.LayoutParams(
 						LinearLayout.LayoutParams.MATCH_PARENT, vRoot
 								.getHeight()
@@ -168,11 +166,6 @@ public class DirectionActivity extends ActionBarActivity implements
 
 			@Override
 			public void onPanelCollapsed(View panel) {
-				// mapView.setLayoutParams(new
-				// SlidingUpPanelLayout.LayoutParams(
-				// SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, panel
-				// .getTop()));
-
 				stepListView.setLayoutParams(new LinearLayout.LayoutParams(
 						LinearLayout.LayoutParams.MATCH_PARENT, vRoot
 								.getHeight()
@@ -361,12 +354,14 @@ public class DirectionActivity extends ActionBarActivity implements
 				cameraUpdate = CameraUpdateFactory.newLatLngBounds(
 						allPointsBounds, BOUNDS_PADDING);
 				initSelectedStep(null, null);
+				stepListView.setSelection(0);
 			} else {
 				cameraUpdate = CameraUpdateFactory.newLatLngZoom(
 						markers.get(selectedMarker).getPosition(), FOCUS_ZOOM);
 				markers.get(selectedMarker).showInfoWindow();
 				initSelectedStep(markers.get(selectedMarker).getTitle(),
 						markers.get(selectedMarker).getSnippet());
+				stepListView.setSelection(selectedMarker);
 			}
 			map.animateCamera(cameraUpdate);
 			slidingUpLayout.collapsePane();
@@ -526,9 +521,13 @@ public class DirectionActivity extends ActionBarActivity implements
 		slidingUpLayout.collapsePane();
 		Marker marker = markers.get(position);
 		initSelectedStep(marker.getTitle(), marker.getSnippet());
-		marker.showInfoWindow();
-		map.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()),
-				250, null);
+
+		Integer lastMarker = selectedMarker;
+		selectedMarker = position;
+		focusOnSelectedMarker(lastMarker);
+		// marker.showInfoWindow();
+		// map.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()),
+		// 250, null);
 	}
 
 	@Override
@@ -588,17 +587,18 @@ public class DirectionActivity extends ActionBarActivity implements
 		intent.putExtra(EXTRA_ROUTE, route);
 		ctx.startActivity(intent);
 	}
-	
+
 	@Override
 	public void onBackPressed() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(R.string.stop_navigation_);
-		builder.setPositiveButton(R.string.yes, new AlertDialog.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				finish();
-			}
-		});
+		builder.setPositiveButton(R.string.yes,
+				new AlertDialog.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						finish();
+					}
+				});
 		builder.setNegativeButton(R.string.no, null);
 		builder.create().show();
 	}
