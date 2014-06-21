@@ -76,9 +76,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private boolean cancelled;
 
 	/** City as detected by the GPS. Null means undetected yet */
-	private City cityDetected = null;
+	private City cityDetected;
 	/** City selected manually, null means not selected yet (from detection). */
-	private City citySelected = null;
+	private City citySelected;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -139,10 +139,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		LocationFinder locationFinder = LocationFinder.getInstance();
 		locationFinder.startLocationDetection();
 		locationFinder.addLocationListener(this);
+		cityDetected = null;
 		citySelected = City.getCityFromCode(getStringPreference(PREF_REGION));
 		updateRegionTextView(citySelected);
 		regionTextView.setOnClickListener(this);
 		findButton.setOnClickListener(this);
+		
+		// Quick find
+		this.onClick(endpointMyLocationButton[ENDPOINT_START]);
+		endpointEditText[ENDPOINT_FINISH].requestFocus();
 	}
 
 	// @Override
@@ -284,6 +289,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 
 					}
 				});
+				AlertDialog dialog = builder.create();
+				dialog.show();
 			}
 		}
 	}

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="_not_found">"%s" tidak ditemukan!</string>
+    <string name="_km_tracked">%.3f km tercatat</string>
+    <string name="about">Tentang KIRI</string>
+    <string name="about_kiri_long">&lt;p&gt;KIRI Transport Publik Pintar adalah aplikasi yang membantu Anda menjelajah Indonesia menggunakan transportasi publik.&lt;/p&gt; &lt;p&gt;Aplikasi ini menggunakan beberapa jasa pihak ketiga: &lt;ul&gt;&lt;li&gt;KIRI API (&lt;a href="https://dev.kiri.travel"&gt;https://dev.kiri.travel&lt;/a&gt;)&lt;/li&gt;&lt;li&gt;Data dikoleksi dari &lt;a href="https://angkot.web.id"&gt;https://angkot.web.id&lt;/a&gt; (lisensi ODBL).&lt;/li&gt;&lt;li&gt;Pencarian tempat oleh Google Place Search&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;&lt;p&gt;Untuk informasi lebih lanjut, kunjungi &lt;a href="http://kiri.travel"&gt;http://kiri.travel&lt;/a&gt;&lt;/p&gt;</string>
+    <string name="app_name">Transport Publik</string>
     <string name="autodetect">Lokasi saya</string>
     <string name="city">Kota</string>
     <string name="connection_error">Gangguan koneksi</string>
@@ -14,12 +18,15 @@
     <string name="from_">Dari&#8230;</string>
     <string name="from_here">Dari sini</string>
     <string name="iso639code">id</string>
+    <string name="itracked">Saya menggunakan transportasi publik sejauh %.3f km! Catat jarak Anda di https://play.google.com/store/apps/details?id=travel.kiri.smarttransportapp</string>
+    <string name="knowmore">Lebih lanjut tentang app ini</string>
     <string name="map_not_available">Peta tidak tersedia</string>
     <string name="my_location">Lokasi saya</string>
     <string name="next">Berikut</string>
     <string name="gps_not_ready">Mohon tunggu sampai lokasi ditemukan</string>
     <string name="kirilogo">KIRI Logo</string>
     <string name="pay_subscription">Dukung kami dan hilangkan iklan dengan membayar biaya langganan</string>
+    <string name="pick_location">Pilih Lokasi</string>
     <string name="please_wait">Mohon tunggu&#8230;</string>
     <string name="previous">Sebelum</string>
     <string name="region">Kota</string>
@@ -27,8 +34,10 @@
     <string name="select_from_map">Pilih dari peta</string>
     <string name="selected_on_map">Dipilih dari peta</string>
     <string name="settings">Pengaturan</string>
+    <string name="share_to_friend">Bagikan ke teman Anda!</string>
     <string name="step">Langkah %d</string>
     <string name="step_icon">Gambar langkah</string>
+    <string name="subscription">Langganan</string>
     <string name="switchmaplist">Tukar peta dengan tulisan</string>
     <string name="to">Ke:</string>
     <string name="to_">Ke&#8230;</string>

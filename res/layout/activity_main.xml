@@ -110,7 +110,9 @@
         android:id="@+id/regionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/you_are_in" />
+        android:text="@string/you_are_in"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <Button
         android:id="@+id/findButton"
@@ -133,7 +135,7 @@
         android:layout_marginBottom="20dp"
         android:drawableLeft="@drawable/ic_action_settings"
         android:gravity="center"
-        android:text="Settings"
+        android:text="@string/settings"
         android:textSize="16sp" />
 
 </LinearLayout>
