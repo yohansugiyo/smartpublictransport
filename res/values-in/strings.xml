@@ -49,5 +49,6 @@
     <string name="yes">Ya</string>
     <string name="you_are_in">Anda berada di %s</string>
     <string name="route_from_x_to_y">Rute dari %1$s ke %2$s</string>
+    <string name="you_have_reached">Anda telah sampai pada tujuan.</string>
 
 </resources>

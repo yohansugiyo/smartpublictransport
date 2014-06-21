@@ -248,7 +248,7 @@ public class DirectionActivity extends ActionBarActivity implements
 				if (i == iLength - 1) {
 					initialMarker = new MarkerOptions().position(
 							step.path.get(step.path.size() - 1)).title(
-							destination);
+							destination).snippet(resources.getString(R.string.you_have_reached));
 					markers.add(map.addMarker(initialMarker));
 					request.getFinishMarker(initialMarker,
 							new MarkerOptionsResponseHandler() {

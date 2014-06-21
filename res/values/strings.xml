@@ -49,5 +49,6 @@
     <string name="to_here">To here</string>
     <string name="yes">Yes</string>
     <string name="you_are_in">You are in %s</string>
+    <string name="you_have_reached">You have reached your destination.</string>
 
 </resources>
