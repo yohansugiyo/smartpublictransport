@@ -1,68 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/mapview"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:visibility="visible" >
-
-        <fragment
-            android:id="@+id/mapfragment"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            class="com.google.android.gms.maps.SupportMapFragment" />
+    <travel.kiri.smarttransportapp.view.SlidingUpPanelLayout
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        app:dragView="@+id/btn_slide"
+        app:overlay="true"
+        app:panelHeight="1dp"
+        app:shadowHeight="4dp" >
 
         <RelativeLayout
-            android:id="@+id/layout_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/mapfragment"
-            android:layout_centerHorizontal="true"
-            android:background="@android:color/transparent"
-            android:orientation="horizontal" >
+            android:id="@+id/mapview"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:visibility="visible" >
 
-            <ImageButton
-                android:id="@+id/imageButtonPrevious"
-                android:layout_width="48dip"
-                android:layout_height="48dip"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:contentDescription="@string/previous"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_prev" />
+            <fragment
+                android:id="@+id/mapfragment"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                class="com.google.android.gms.maps.SupportMapFragment" />
 
-            <ImageButton
-                android:id="@+id/imageButtonNext"
-                android:layout_width="48dip"
-                android:layout_height="48dip"
-                android:layout_toRightOf="@+id/imageButtonPrevious"
-                android:contentDescription="@string/next"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_next" />
+            <RelativeLayout
+                android:id="@+id/layout_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/mapfragment"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:orientation="horizontal" >
+
+                <ImageButton
+                    android:id="@+id/imageButtonPrevious"
+                    android:layout_width="48dip"
+                    android:layout_height="48dip"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:contentDescription="@string/previous"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_prev" />
+
+                <ImageButton
+                    android:id="@+id/imageButtonNext"
+                    android:layout_width="48dip"
+                    android:layout_height="48dip"
+                    android:layout_toRightOf="@+id/imageButtonPrevious"
+                    android:contentDescription="@string/next"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_next" />
+            </RelativeLayout>
         </RelativeLayout>
-    </RelativeLayout>
 
-    <ListView
-        android:id="@+id/steplistview"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1"
-        android:visibility="gone" >
-    </ListView>
+        <ListView
+            android:id="@+id/steplistview"
+            android:layout_width="fill_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1"
+            android:visibility="gone" >
+        </ListView>
 
-    <!-- <com.google.android.gms.ads.AdView -->
-    <!-- android:id="@+id/admob" -->
-    <!-- android:layout_width="fill_parent" -->
-    <!-- android:layout_height="wrap_content" -->
-    <!-- ads:adSize="BANNER" -->
-    <!-- ads:adUnitId="@string/admob_id" /> -->
+        <!-- <com.google.android.gms.ads.AdView -->
+        <!-- android:id="@+id/admob" -->
+        <!-- android:layout_width="fill_parent" -->
+        <!-- android:layout_height="wrap_content" -->
+        <!-- ads:adSize="BANNER" -->
+        <!-- ads:adUnitId="@string/admob_id" /> -->
+
+    </travel.kiri.smarttransportapp.view.SlidingUpPanelLayout>
 
 </LinearLayout>
