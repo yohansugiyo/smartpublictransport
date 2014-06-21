@@ -198,7 +198,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 										.getEditTextRepresentation());
 							}
 							String regionCode;
-							if (cityDetected != null) {
+							if (citySelected != null) {
+								regionCode = citySelected.code;
+							} else if (cityDetected != null) {
 								regionCode = cityDetected.code;
 							} else {
 								Location lastLocation = LocationFinder
