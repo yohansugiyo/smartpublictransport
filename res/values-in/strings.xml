@@ -10,6 +10,7 @@
     <string name="city">Kota</string>
     <string name="connection_error">Gangguan koneksi</string>
     <string name="determining_location">Mencari lokasi&#8230;</string>
+    <string name="directions">Petunjuk</string>
     <string name="directions_to">Rute ke %s</string>
     <string name="egstasiun">misal: Stasiun</string>
     <string name="egmonasjakarta">misal: Monas, Jakarta</string>
@@ -32,7 +33,6 @@
     <string name="please_wait">Mohon tunggu&#8230;</string>
     <string name="previous">Sebelum</string>
     <string name="region">Kota</string>
-    <string name="route_from_x_to_y">Rute dari %1$s ke %2$s</string>
     <string name="route_not_found">Rute tidak ditemukan</string>
     <string name="select_from_map">Pilih dari peta</string>
     <string name="selected_on_map">Dipilih dari peta</string>
@@ -48,6 +48,6 @@
     <string name="to_here">Ke sini</string>
     <string name="yes">Ya</string>
     <string name="you_are_in">Anda berada di %s</string>
-    <string name="route_from_x_to_y">Ruten angkot dari %1$s ke %2$s</string>
+    <string name="route_from_x_to_y">Rute dari %1$s ke %2$s</string>
 
 </resources>

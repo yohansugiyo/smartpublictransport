@@ -73,7 +73,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyA9wmXwbpvnJG32jAni3PK6_JpQNHmDcfo" />
+            android:value="AIzaSyA3kwPX8IAQloP4JrS_7BZGHVYV-PRxvAg" />
 
         <activity
             android:name="travel.kiri.smarttransportapp.SettingsActivity"
