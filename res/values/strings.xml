@@ -25,6 +25,7 @@
     <string name="map_not_available">Map is not available</string>
     <string name="my_location">My Location</string>
     <string name="next">Next</string>
+    <string name="no">No</string>
     <string name="gps_not_ready">Please wait until location is determined</string>
     <string name="kirilogo">Logo KIRI</string>
     <string name="pay_subscription">Support us and remove ad by paying subscription fee</string>
@@ -32,6 +33,7 @@
     <string name="please_wait">Please wait&#8230;</string>
     <string name="previous">Previous</string>
     <string name="region">Region</string>
+    <string name="route_from_x_to_y">Route from %1$s to %2$s</string>
     <string name="route_not_found">Route not found</string>
     <string name="select_from_map">Select from map</string>
     <string name="selected_on_map">Selected on map</string>
@@ -39,12 +41,13 @@
     <string name="share_to_friend">Share it to your friends!</string>
     <string name="step">Step %d</string>
     <string name="step_icon">Step Icon</string>
+    <string name="stop_navigation_">Do you want to stop navigation?</string>
     <string name="subscription">Subscription</string>
     <string name="switchmaplist">Switch map and list view</string>
     <string name="to">To:</string>
     <string name="to_">To&#8230;</string>
     <string name="to_here">To here</string>
+    <string name="yes">Yes</string>
     <string name="you_are_in">You are in %s</string>
-    <string name="route_from_x_to_y">Route from %1$s to %2$s</string>
 
 </resources>
