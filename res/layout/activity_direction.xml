@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:background="#FFF"
     android:orientation="vertical" >
 
     <travel.kiri.smarttransportapp.view.SlidingUpPanelLayout
@@ -14,6 +15,7 @@
         app:dragView="@+id/tv_selected_step"
         app:overlay="true"
         app:panelHeight="100dp"
+        app:paralaxOffset="10dp"
         app:shadowHeight="4dp" >
 
         <RelativeLayout
@@ -33,6 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
                 android:background="@android:color/transparent"
                 android:orientation="horizontal" >
 
@@ -60,26 +63,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="#cFFF"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/tv_selected_step"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="#c000"
-                android:fontFamily="sans-serif-thin"
+                android:layout_height="wrap_content"
+                android:background="#eFFF"
+                android:fontFamily="sans-serif-light"
                 android:gravity="center_vertical"
-                android:lines="3"
+                android:minHeight="60dp"
                 android:padding="10dp"
                 android:text="Direction from x to y"
-                android:textColor="#FFF"
+                android:textColor="#000"
                 android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#666" />
 
             <ListView
                 android:id="@+id/steplistview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#9000" >
+                android:clickable="true" >
             </ListView>
         </LinearLayout>
 

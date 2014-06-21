@@ -35,7 +35,7 @@
             android:layout_below="@+id/fromTextView"
             android:layout_toLeftOf="@+id/imageButtonGpsFrom"
             android:hint="@string/egstasiun"
-            android:inputType="textNoSuggestions|textPostalAddress"
+            android:inputType="textNoSuggestions|textPostalAddress|textCapWords"
             android:singleLine="true" >
         </EditText>
 
@@ -81,7 +81,7 @@
             android:layout_below="@+id/toTextView"
             android:layout_toLeftOf="@+id/imageButtonGpsTo"
             android:hint="@string/egmonasjakarta"
-            android:inputType="textNoSuggestions|textPostalAddress"
+            android:inputType="textNoSuggestions|textPostalAddress|textCapWords"
             android:singleLine="true" >
         </EditText>
 
@@ -110,9 +110,9 @@
         android:id="@+id/regionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/you_are_in"
         android:layout_marginTop="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:text="@string/you_are_in"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/findButton"

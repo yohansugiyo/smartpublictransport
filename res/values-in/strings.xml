@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="_not_found">"%s" tidak ditemukan!</string>
     <string name="_km_tracked">%.3f km tercatat</string>
     <string name="about">Tentang KIRI</string>
@@ -43,5 +44,6 @@
     <string name="to_">Ke&#8230;</string>
     <string name="to_here">Ke sini</string>
     <string name="you_are_in">Anda berada di %s</string>
+    <string name="route_from_x_to_y">Ruten angkot dari %1$s ke %2$s</string>
 
 </resources>

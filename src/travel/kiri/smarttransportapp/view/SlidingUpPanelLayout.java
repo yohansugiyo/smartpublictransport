@@ -25,8 +25,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 
-import com.nineoldandroids.view.animation.AnimatorProxy;
-
 public class SlidingUpPanelLayout extends ViewGroup {
 
 	private static final String TAG = SlidingUpPanelLayout.class

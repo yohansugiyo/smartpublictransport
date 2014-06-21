@@ -11,6 +11,7 @@ import travel.kiri.smarttransportapp.model.protocol.CicaheumLedengProtocol;
 import travel.kiri.smarttransportapp.model.protocol.ImageResponseHandler;
 import travel.kiri.smarttransportapp.model.protocol.MarkerOptionsResponseHandler;
 import travel.kiri.smarttransportapp.view.SlidingUpPanelLayout;
+import travel.kiri.smarttransportapp.view.SlidingUpPanelLayout.PanelSlideListener;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +64,7 @@ public class DirectionActivity extends ActionBarActivity implements
 	public static final String EXTRA_FROM = "travel.kiri.smarttransportapp.intent.extra.from";
 
 	public static final float DEFAULT_ZOOM = 12;
-	public static final float FOCUS_ZOOM = 18;
+	public static final float FOCUS_ZOOM = 16;
 
 	private static final int COLOR_VEHICLE = Color.rgb(0, 128, 0);
 	private static final int COLOR_WALK = Color.rgb(255, 0, 0);
@@ -80,8 +82,9 @@ public class DirectionActivity extends ActionBarActivity implements
 	private Integer selectedMarker;
 	private LatLngBounds allPointsBounds;
 
+	private View vRoot;
+	private ListView stepListView;
 	private TextView tvSelectedStep;
-	private View stepListView;
 	private View mapView;
 	private ImageButton previousImageButton;
 	private ImageButton nextImageButton;
@@ -114,8 +117,9 @@ public class DirectionActivity extends ActionBarActivity implements
 
 		setupActionBar();
 
+		vRoot = findViewById(R.id.root);
 		tvSelectedStep = (TextView) findViewById(R.id.tv_selected_step);
-		stepListView = findViewById(R.id.steplistview);
+		stepListView = (ListView) findViewById(R.id.steplistview);
 		mapView = findViewById(R.id.mapview);
 		previousImageButton = (ImageButton) findViewById(R.id.imageButtonPrevious);
 		nextImageButton = (ImageButton) findViewById(R.id.imageButtonNext);
@@ -134,12 +138,55 @@ public class DirectionActivity extends ActionBarActivity implements
 		adKeywords = intent.getStringArrayListExtra(EXTRA_ADKEYWORDS);
 
 		// Setup list
-		ListView stepListView = (ListView) findViewById(R.id.steplistview);
+		stepListView = (ListView) findViewById(R.id.steplistview);
 		stepListView.setAdapter(new RouteAdapter(this, route, this));
 		stepListView.setOnItemClickListener(this);
 
-		slidingUpLayout.setAnchorPoint(0.6F);
+		slidingUpLayout.setAnchorPoint(0.4F);
+		slidingUpLayout.setPanelSlideListener(new PanelSlideListener() {
 
+			@Override
+			public void onPanelSlide(View panel, float slideOffset) {
+
+			}
+
+			@Override
+			public void onPanelExpanded(View panel) {
+				// mapView.setLayoutParams(new
+				// SlidingUpPanelLayout.LayoutParams(
+				// SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, panel
+				// .getTop()));
+
+				stepListView.setLayoutParams(new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT, vRoot
+								.getHeight()
+								- tvSelectedStep.getHeight()
+								- panel.getTop()));
+			}
+
+			@Override
+			public void onPanelCollapsed(View panel) {
+				// mapView.setLayoutParams(new
+				// SlidingUpPanelLayout.LayoutParams(
+				// SlidingUpPanelLayout.LayoutParams.MATCH_PARENT, panel
+				// .getTop()));
+
+				stepListView.setLayoutParams(new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT, vRoot
+								.getHeight()
+								- tvSelectedStep.getHeight()
+								- panel.getTop()));
+			}
+
+			@Override
+			public void onPanelAnchored(View panel) {
+				stepListView.setLayoutParams(new LinearLayout.LayoutParams(
+						LinearLayout.LayoutParams.MATCH_PARENT, vRoot
+								.getHeight()
+								- tvSelectedStep.getHeight()
+								- panel.getTop()));
+			}
+		});
 		// Initialize map
 		map = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.mapfragment)).getMap();
@@ -320,6 +367,7 @@ public class DirectionActivity extends ActionBarActivity implements
 						markers.get(selectedMarker).getSnippet());
 			}
 			map.animateCamera(cameraUpdate);
+			slidingUpLayout.collapsePane();
 		}
 	}
 
@@ -473,8 +521,12 @@ public class DirectionActivity extends ActionBarActivity implements
 			long id) {
 		// Switch to map if any of the item list is clicked.
 		// toggleMapAndList();
-		// TODO set marker popup
-		markers.get(position).showInfoWindow();
+		slidingUpLayout.collapsePane();
+		Marker marker = markers.get(position);
+		initSelectedStep(marker.getTitle(), marker.getSnippet());
+		marker.showInfoWindow();
+		map.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()),
+				250, null);
 	}
 
 	@Override
@@ -484,6 +536,10 @@ public class DirectionActivity extends ActionBarActivity implements
 			selectedMarker = index;
 		}
 		initSelectedStep(marker.getTitle(), marker.getSnippet());
+
+		// Open the info window for the marker
+		// marker.showInfoWindow();
+
 		return false;
 	}
 
