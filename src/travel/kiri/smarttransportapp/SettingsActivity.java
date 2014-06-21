@@ -7,15 +7,21 @@ import java.util.Map;
 
 import travel.kiri.smarttransportapp.model.StatisticCounter;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends ActionBarActivity implements OnItemClickListener {
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	protected void setupActionBar() {
@@ -56,6 +62,7 @@ public class SettingsActivity extends ActionBarActivity {
 
 		ListView settingsListView = (ListView) findViewById(R.id.settingsListView);
 		settingsListView.setAdapter(adapter);
+		settingsListView.setOnItemClickListener(this);
 
 		setupActionBar();
 	}
@@ -71,4 +78,15 @@ public class SettingsActivity extends ActionBarActivity {
 		}
 	}
 
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		switch (position) {
+		case 1:
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, String.format(getResources().getString(R.string.itracked), 0.001 * StatisticCounter.getInstance().getTotalDistance()));
+			sendIntent.setType("text/plain");
+			startActivity(sendIntent);
+		}
+	}
 }

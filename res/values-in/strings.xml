@@ -14,6 +14,7 @@
     <string name="from_">Dari&#8230;</string>
     <string name="from_here">Dari sini</string>
     <string name="iso639code">id</string>
+    <string name="itracked">Saya menggunakan transportasi publik sejauh %.3f km! Catat jarak Anda di https://play.google.com/store/apps/details?id=travel.kiri.smarttransportapp</string>
     <string name="map_not_available">Peta tidak tersedia</string>
     <string name="my_location">Lokasi saya</string>
     <string name="next">Berikut</string>

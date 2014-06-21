@@ -18,6 +18,7 @@
     <string name="from_">From&#8230;</string>
     <string name="from_here">From here</string>
     <string name="iso639code">en</string>
+    <string name="itracked">I tracked %.3f km using public transport! Track yours at https://play.google.com/store/apps/details?id=travel.kiri.smarttransportapp</string>
     <string name="knowmore">Know more about Smart Public Transport</string>
     <string name="map_not_available">Map is not available</string>
     <string name="my_location">My Location</string>
