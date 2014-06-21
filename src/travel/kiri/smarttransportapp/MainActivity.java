@@ -198,63 +198,59 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 										.getEditTextRepresentation());
 							}
 							String regionCode;
-							if (citySelected != null) {
-								regionCode = citySelected.code;
+							if (cityDetected != null) {
+								regionCode = cityDetected.code;
 							} else {
-								if (cityDetected != null) {
-									regionCode = cityDetected.code;
+								Location lastLocation = LocationFinder
+										.getInstance()
+										.getLastKnownLocation();
+								if (lastLocation == null) {
+									regionCode = City.CITIES[0].code;
 								} else {
-									Location lastLocation = LocationFinder
-											.getInstance()
-											.getLastKnownLocation();
-									if (lastLocation == null) {
-										regionCode = City.CITIES[0].code;
-									} else {
-										regionCode = City
-												.findNearestCity(lastLocation).code;
-									}
+									regionCode = City
+											.findNearestCity(lastLocation).code;
 								}
-								pendingPlaceSearch++;
-								final String textQuery = endpoint
-										.getEditTextRepresentation();
-								request.searchPlace(
-										endpoint.getEditTextRepresentation(),
-										regionCode,
-										new SearchPlaceResponseHandler() {
-											@Override
-											public void searchPlaceResponseReceived(
-													List<Place> places,
-													List<String> attributions) {
-												if (places.size() == 0) {
-													cancelled = true;
-													loadingDialog.dismiss();
-													Toast toast = Toast
-															.makeText(
-																	getApplicationContext(),
-																	String.format(
-																			getString(R.string._not_found),
-																			textQuery),
-																	Toast.LENGTH_LONG);
-													toast.show();
-												} else {
-													// One place search has been
-													// completed
-													if (!cancelled) {
-														pendingPlaceSearch--;
-														endpointCopy
-																.setPlaces(places);
-														if (pendingPlaceSearch == 0) {
-															loadingDialog
-																	.dismiss();
-															showPlaceOptionsPickDialog();
-														}
-													} else {
-														loadingDialog.dismiss();
+							}
+							pendingPlaceSearch++;
+							final String textQuery = endpoint
+									.getEditTextRepresentation();
+							request.searchPlace(
+									endpoint.getEditTextRepresentation(),
+									regionCode,
+									new SearchPlaceResponseHandler() {
+										@Override
+										public void searchPlaceResponseReceived(
+												List<Place> places,
+												List<String> attributions) {
+											if (places.size() == 0) {
+												cancelled = true;
+												loadingDialog.dismiss();
+												Toast toast = Toast
+														.makeText(
+																getApplicationContext(),
+																String.format(
+																		getString(R.string._not_found),
+																		textQuery),
+																Toast.LENGTH_LONG);
+												toast.show();
+											} else {
+												// One place search has been
+												// completed
+												if (!cancelled) {
+													pendingPlaceSearch--;
+													endpointCopy
+															.setPlaces(places);
+													if (pendingPlaceSearch == 0) {
+														loadingDialog
+																.dismiss();
+														showPlaceOptionsPickDialog();
 													}
+												} else {
+													loadingDialog.dismiss();
 												}
 											}
-										});
-							}
+										}
+									});
 						}
 					}
 					if (pendingPlaceSearch == 0) {
@@ -282,9 +278,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 							citySelected = null;
 							updateRegionTextView(null);
 							saveStringPreference(PREF_REGION, null);
-
 						} else {
-							loadingDialog.show();
+							citySelected = (City)selected;
+							updateRegionTextView(citySelected);
+							saveStringPreference(PREF_REGION, citySelected.code);
 						}
 
 					}
@@ -348,9 +345,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 					});
 			loadingDialog.show();
 		} catch (NullPointerException nfe) {
-			Toast toast = Toast.makeText(getApplicationContext(),
-					nfe.getMessage(), Toast.LENGTH_LONG);
-			toast.show();
+			reportError(this, nfe);
 		}
 	}
 
