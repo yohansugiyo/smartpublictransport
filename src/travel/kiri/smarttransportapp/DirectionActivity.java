@@ -38,8 +38,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,13 +53,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class DirectionActivity extends FragmentActivity implements OnClickListener, OnInfoWindowClickListener,
-		OnItemClickListener, OnMarkerClickListener, ErrorReporter, LocationListener {
+public class DirectionActivity extends FragmentActivity implements
+		OnClickListener, OnInfoWindowClickListener, OnItemClickListener,
+		OnMarkerClickListener, ErrorReporter, LocationListener {
 
 	public static final String EXTRA_ROUTE = "travel.kiri.smarttransportapp.intent.extra.route";
 	public static final String EXTRA_ADKEYWORDS = "travel.kiri.smarttransportapp.intent.extra.adkeywords";
 	public static final String EXTRA_DESTINATION = "travel.kiri.smarttransportapp.intent.extra.destination";
-	
+
 	public static final float DEFAULT_ZOOM = 12;
 	public static final float FOCUS_ZOOM = 18;
 
@@ -87,28 +86,29 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 
 	private CicaheumLedengProtocol request;
 	private Resources resources;
-	
+
 	private LocationFinder locationFinder;
-	
+
 	private Location lastLocation = null;
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	protected void setupActionBar() {
-		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB && getActionBar() != null) {
+		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
+				&& getActionBar() != null) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 	}
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		List<String> adKeywords = null;
 		Location adLocation = null;
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_direction);
 
 		setupActionBar();
-		
+
 		stepListView = findViewById(R.id.steplistview);
 		mapView = findViewById(R.id.mapview);
 		previousImageButton = (ImageButton) findViewById(R.id.imageButtonPrevious);
@@ -119,7 +119,7 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 		locationFinder = LocationFinder.getInstance();
 		locationFinder.addLocationListener(this);
 		locationFinder.startLocationDetection();
-		
+
 		Intent intent = getIntent();
 		route = intent.getParcelableExtra(EXTRA_ROUTE);
 		final String destination = intent.getStringExtra(EXTRA_DESTINATION);
@@ -131,11 +131,13 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 		stepListView.setOnItemClickListener(this);
 
 		// Initialize map
-		map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapfragment)).getMap();
+		map = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.mapfragment)).getMap();
 		if (map != null) {
 			map.setMyLocationEnabled(true);
 			map.setLocationSource(locationFinder);
-			map.setInfoWindowAdapter(new TextWrappedInfoWindowAdapter(LayoutInflater.from(this)));
+			map.setInfoWindowAdapter(new TextWrappedInfoWindowAdapter(
+					LayoutInflater.from(this)));
 			map.setOnInfoWindowClickListener(this);
 			map.setOnMarkerClickListener(this);
 
@@ -145,15 +147,19 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 			markers = new ArrayList<Marker>();
 
 			List<LatLng> allPoints = new ArrayList<LatLng>();
-			if (route.steps.size() == 1 && route.steps.get(0).means.equals(CicaheumLedengProtocol.PROTO_MEANS_NONE)) {
-				Toast toast = Toast.makeText(getApplicationContext(), R.string.route_not_found, Toast.LENGTH_LONG);
+			if (route.steps.size() == 1
+					&& route.steps.get(0).means
+							.equals(CicaheumLedengProtocol.PROTO_MEANS_NONE)) {
+				Toast toast = Toast.makeText(getApplicationContext(),
+						R.string.route_not_found, Toast.LENGTH_LONG);
 				toast.show();
 			}
 			for (int i = 0, iLength = route.steps.size(); i < iLength; i++) {
 				final Route.Step step = route.steps.get(i);
 				if (!step.means.equals(CicaheumLedengProtocol.PROTO_MEANS_NONE)) {
 					PolylineOptions polyline = new PolylineOptions();
-					if (step.means.equals(CicaheumLedengProtocol.PROTO_MEANS_WALK)) {
+					if (step.means
+							.equals(CicaheumLedengProtocol.PROTO_MEANS_WALK)) {
 						polyline.color(COLOR_WALK);
 					} else {
 						polyline.color(COLOR_VEHICLE);
@@ -164,8 +170,11 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 				}
 				allPoints.addAll(step.path);
 				// Request for marker, starts with default marker.
-				MarkerOptions initialMarker = new MarkerOptions().position(step.path.get(0))
-						.title(String.format(resources.getString(R.string.step), i + 1)).snippet(step.description);
+				MarkerOptions initialMarker = new MarkerOptions()
+						.position(step.path.get(0))
+						.title(String.format(
+								resources.getString(R.string.step), i + 1))
+						.snippet(step.description);
 				markers.add(map.addMarker(initialMarker));
 				final int markerIndex = i;
 				MarkerOptionsResponseHandler markerResponseHandler = new MarkerOptionsResponseHandler() {
@@ -180,28 +189,36 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 				if (i == 0) {
 					request.getStartMarker(initialMarker, markerResponseHandler);
 				} else {
-					request.getStepMarker(step, initialMarker, markerResponseHandler);
+					request.getStepMarker(step, initialMarker,
+							markerResponseHandler);
 				}
 				if (i == iLength - 1) {
-					initialMarker = new MarkerOptions().position(step.path.get(step.path.size() - 1))
-							.title(destination);
+					initialMarker = new MarkerOptions().position(
+							step.path.get(step.path.size() - 1)).title(
+							destination);
 					markers.add(map.addMarker(initialMarker));
-					request.getFinishMarker(initialMarker, new MarkerOptionsResponseHandler() {
-						@Override
-						public void markerOptionsReady(MarkerOptions markerOptions) {
-							markers.get(markerIndex + 1).remove();
-							map.addMarker(markerOptions);
-						}
-					});
+					request.getFinishMarker(initialMarker,
+							new MarkerOptionsResponseHandler() {
+								@Override
+								public void markerOptionsReady(
+										MarkerOptions markerOptions) {
+									markers.get(markerIndex + 1).remove();
+									map.addMarker(markerOptions);
+								}
+							});
 					// Set last point for ad location
 					LatLng lastPoint = step.path.get(step.path.size() - 1);
-					adLocation = LocationUtilities.createLocation((float)lastPoint.latitude, (float)lastPoint.longitude);
+					adLocation = LocationUtilities.createLocation(
+							(float) lastPoint.latitude,
+							(float) lastPoint.longitude);
 				}
 			}
 			// Set initial location: current location
 			Location location = locationFinder.getCurrentLocation();
 			if (location != null) {
-				map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtilities.convertToLatLng(location), DEFAULT_ZOOM));
+				map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+						LocationUtilities.convertToLatLng(location),
+						DEFAULT_ZOOM));
 			}
 
 			allPointsBounds = LocationUtilities.detectBounds(allPoints);
@@ -215,27 +232,28 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 				}
 			});
 		}
-		
+
 		// Lastly, setup the admob
-		AdView adView = (AdView) findViewById(R.id.admob);
-		AdRequest.Builder builder = new AdRequest.Builder();
-		for (String keyword: adKeywords) {
-			builder.addKeyword(keyword);
-		}
-		if (adLocation != null) {
-			builder.setLocation(adLocation);
-		}
-		adView.loadAd(builder.build());
+		// AdView adView = (AdView) findViewById(R.id.admob);
+		// AdRequest.Builder builder = new AdRequest.Builder();
+		// for (String keyword: adKeywords) {
+		// builder.addKeyword(keyword);
+		// }
+		// if (adLocation != null) {
+		// builder.setLocation(adLocation);
+		// }
+		// adView.loadAd(builder.build());
 	}
 
 	@Override
 	public void onDestroy() {
-		// When the activity is finished, restore the interval value to normal and stop locating.
+		// When the activity is finished, restore the interval value to normal
+		// and stop locating.
 		locationFinder.removeLocationListener(this);
 		locationFinder.stopLocationDetection();
 		super.onDestroy();
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -280,9 +298,11 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 			}
 			CameraUpdate cameraUpdate;
 			if (selectedMarker == null) {
-				cameraUpdate = CameraUpdateFactory.newLatLngBounds(allPointsBounds, BOUNDS_PADDING);
+				cameraUpdate = CameraUpdateFactory.newLatLngBounds(
+						allPointsBounds, BOUNDS_PADDING);
 			} else {
-				cameraUpdate = CameraUpdateFactory.newLatLngZoom(markers.get(selectedMarker).getPosition(), FOCUS_ZOOM);
+				cameraUpdate = CameraUpdateFactory.newLatLngZoom(
+						markers.get(selectedMarker).getPosition(), FOCUS_ZOOM);
 				markers.get(selectedMarker).showInfoWindow();
 			}
 			map.animateCamera(cameraUpdate);
@@ -309,7 +329,8 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 			stepListView.setVisibility(View.GONE);
 			toggleMapMenuItem.setIcon(R.drawable.ic_list);
 			if (map == null) {
-				Toast toast = Toast.makeText(getApplicationContext(), R.string.map_not_available, Toast.LENGTH_LONG);
+				Toast toast = Toast.makeText(getApplicationContext(),
+						R.string.map_not_available, Toast.LENGTH_LONG);
 				toast.show();
 			}
 		} else {
@@ -321,7 +342,8 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 
 	@Override
 	public void reportError(Object source, Throwable tr) {
-		Toast toast = Toast.makeText(getApplicationContext(), R.string.connection_error, Toast.LENGTH_LONG);
+		Toast toast = Toast.makeText(getApplicationContext(),
+				R.string.connection_error, Toast.LENGTH_LONG);
 		toast.show();
 		Log.e(source.getClass().toString(), tr.getMessage(), tr);
 	}
@@ -332,7 +354,8 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 	 * @author nathan
 	 * 
 	 */
-	private static class TextWrappedInfoWindowAdapter implements InfoWindowAdapter {
+	private static class TextWrappedInfoWindowAdapter implements
+			InfoWindowAdapter {
 		private LayoutInflater inflater;
 
 		TextWrappedInfoWindowAdapter(LayoutInflater inflater) {
@@ -348,7 +371,8 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 		public View getInfoContents(Marker marker) {
 			View popup = inflater.inflate(R.layout.view_infowindow, null);
 			TextView textViewTitle = (TextView) popup.findViewById(R.id.title);
-			TextView textViewSnippet = (TextView) popup.findViewById(R.id.snippet);
+			TextView textViewSnippet = (TextView) popup
+					.findViewById(R.id.snippet);
 			if (marker.getTitle() == null)
 				textViewTitle.setVisibility(View.GONE);
 			else
@@ -373,7 +397,8 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 		private final LayoutInflater inflater;
 		private final CicaheumLedengProtocol request;
 
-		public RouteAdapter(Context context, Route route, ErrorReporter errorReporter) {
+		public RouteAdapter(Context context, Route route,
+				ErrorReporter errorReporter) {
 			this.inflater = LayoutInflater.from(context);
 			this.route = route;
 			this.request = new CicaheumLedengProtocol(context, errorReporter);
@@ -398,16 +423,20 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Route.Step step = route.steps.get(position);
 			if (convertView == null) {
-				convertView = inflater.inflate(R.layout.view_route_step_item, null);
+				convertView = inflater.inflate(R.layout.view_route_step_item,
+						null);
 			}
-			final ImageView stepIcon = (ImageView) convertView.findViewById(R.id.stepIcon);
-			request.getStepImage(step, CicaheumLedengProtocol.MODIFIER_ICON, new ImageResponseHandler() {
-				@Override
-				public void imageReceived(Bitmap bitmap) {
-					stepIcon.setImageBitmap(bitmap);
-				}
-			});
-			TextView stepDescription = (TextView) convertView.findViewById(R.id.stepDescription);
+			final ImageView stepIcon = (ImageView) convertView
+					.findViewById(R.id.stepIcon);
+			request.getStepImage(step, CicaheumLedengProtocol.MODIFIER_ICON,
+					new ImageResponseHandler() {
+						@Override
+						public void imageReceived(Bitmap bitmap) {
+							stepIcon.setImageBitmap(bitmap);
+						}
+					});
+			TextView stepDescription = (TextView) convertView
+					.findViewById(R.id.stepDescription);
 			stepDescription.setText(step.description);
 			return convertView;
 		}
@@ -441,7 +470,8 @@ public class DirectionActivity extends FragmentActivity implements OnClickListen
 			float distance = lastLocation.distanceTo(currentLocation);
 			StatisticCounter.getInstance().addTotalDistance(distance);
 			// TODO just a debug
-			Toast toast = Toast.makeText(this, "distance=" + distance, Toast.LENGTH_SHORT);
+			Toast toast = Toast.makeText(this, "distance=" + distance,
+					Toast.LENGTH_SHORT);
 			toast.show();
 		}
 		lastLocation = currentLocation;
