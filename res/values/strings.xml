@@ -19,12 +19,14 @@
     <string name="from">From:</string>
     <string name="from_">From&#8230;</string>
     <string name="from_here">From here</string>
+    <string name="history">History</string>
     <string name="iso639code">en</string>
     <string name="itracked">I tracked %.3f km using public transport! Track yours at https://play.google.com/store/apps/details?id=travel.kiri.smarttransportapp</string>
     <string name="knowmore">Know more about this app</string>
     <string name="map_not_available">Map is not available</string>
     <string name="my_location">My Location</string>
     <string name="next">Next</string>
+    <string name="no_data_in_history">No recent searches</string>
     <string name="no">No</string>
     <string name="gps_not_ready">Please wait until location is determined</string>
     <string name="kirilogo">Logo KIRI</string>
@@ -46,6 +48,7 @@
     <string name="switchmaplist">Switch map and list view</string>
     <string name="to">To:</string>
     <string name="to_">To&#8230;</string>
+    <string name="_to_">&#160;to&#160;</string>
     <string name="to_here">To here</string>
     <string name="yes">Yes</string>
     <string name="you_are_in">You are in %s</string>

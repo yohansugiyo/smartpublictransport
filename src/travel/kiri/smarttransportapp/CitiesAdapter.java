@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+// TODO combine with City class?
 public class CitiesAdapter extends BaseAdapter {
 
 	private List<City> cities;
