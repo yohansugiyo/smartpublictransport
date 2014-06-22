@@ -65,7 +65,9 @@ public class MyLocationPoint extends Point {
 		}
 		
 	     protected void onPostExecute(String result) {
-	         textualRepresentation = result;
+	    	 if (result != null) {
+	    		 textualRepresentation = result;
+	    	 }
 	     }
 	}
 }

@@ -18,7 +18,6 @@ import travel.kiri.smarttransportapp.model.protocol.FindRouteResponseHandler;
 import travel.kiri.smarttransportapp.model.protocol.SearchPlaceResponseHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;

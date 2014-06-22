@@ -306,10 +306,6 @@ public class DirectionActivity extends ActionBarActivity implements
 
 	@Override
 	public void onDestroy() {
-		// When the activity is finished, restore the interval value to normal
-		// and stop locating.
-		locationFinder.removeLocationListener(this);
-		locationFinder.stopLocationDetection();
 		super.onDestroy();
 	}
 
