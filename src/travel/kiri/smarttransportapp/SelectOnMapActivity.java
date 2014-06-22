@@ -30,7 +30,6 @@ public class SelectOnMapActivity extends FragmentActivity implements
 
 	public static final String EXTRA_ENDPOINT_TYPE = "travel.kiri.smarttravelapp.intent.extra.endpointtype";
 	public static final String EXTRA_LOCATION = "travel.kiri.smarttravelapp.intent.extra.location";
-	public static final float DEFAULT_ZOOM = 12;
 
 	private GoogleMap map;
 	private LocationFinder locationFinder;
@@ -74,6 +73,9 @@ public class SelectOnMapActivity extends FragmentActivity implements
 			map.setOnInfoWindowClickListener(this);
 			map.setOnMapClickListener(this);
 			map.setOnMarkerClickListener(this);
+
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+					Constants.DEFAULT_LAT, Constants.DEFAULT_LNG), 11));
 		}
 	}
 
@@ -103,7 +105,8 @@ public class SelectOnMapActivity extends FragmentActivity implements
 	@Override
 	public void onLocationChanged(Location location) {
 		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
-				LocationUtilities.convertToLatLng(location), DEFAULT_ZOOM);
+				LocationUtilities.convertToLatLng(location),
+				Constants.DEFAULT_ZOOM);
 		map.moveCamera(update);
 		locationFinder.removeLocationListener(this);
 	}

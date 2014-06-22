@@ -65,7 +65,6 @@ public class DirectionActivity extends ActionBarActivity implements
 	public static final String EXTRA_DESTINATION = "travel.kiri.smarttransportapp.intent.extra.destination";
 	public static final String EXTRA_FROM = "travel.kiri.smarttransportapp.intent.extra.from";
 
-	public static final float DEFAULT_ZOOM = 12;
 	public static final float FOCUS_ZOOM = 16;
 
 	private static final int COLOR_VEHICLE = Color.rgb(0, 128, 0);
@@ -277,7 +276,10 @@ public class DirectionActivity extends ActionBarActivity implements
 			if (location != null) {
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(
 						LocationUtilities.convertToLatLng(location),
-						DEFAULT_ZOOM));
+						Constants.DEFAULT_ZOOM));
+			} else {
+				map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+						Constants.DEFAULT_LAT, Constants.DEFAULT_LNG), 11));
 			}
 
 			allPointsBounds = LocationUtilities.detectBounds(allPoints);
