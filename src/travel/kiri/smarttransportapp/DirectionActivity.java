@@ -2,6 +2,7 @@ package travel.kiri.smarttransportapp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import travel.kiri.smarttransportapp.model.City;
 import travel.kiri.smarttransportapp.model.LocationFinder;
@@ -18,6 +19,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -25,9 +27,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -103,6 +109,11 @@ public class DirectionActivity extends ActionBarActivity implements
 	private String from;
 	private String destination;
 
+	private boolean isMuted = false;
+	private TextToSpeech ttobj;
+	private SharedPreferences pref;
+	private final static String KEY_SPEECH = "speech";
+
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	protected void setupActionBar() {
 		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
@@ -146,6 +157,7 @@ public class DirectionActivity extends ActionBarActivity implements
 		locationFinder.addLocationListener(this);
 		locationFinder.startLocationDetection();
 
+		// Setup Sliding Up Panel
 		slidingUpLayout.setAnchorPoint(0.4F);
 		slidingUpLayout.setPanelSlideListener(new PanelSlideListener() {
 
@@ -185,6 +197,23 @@ public class DirectionActivity extends ActionBarActivity implements
 								- panel.getTop()));
 			}
 		});
+		// END Setup Sliding Up Panel
+
+		// TTS
+		ttobj = new TextToSpeech(getApplicationContext(),
+				new TextToSpeech.OnInitListener() {
+					@Override
+					public void onInit(int status) {
+						if (status != TextToSpeech.ERROR) {
+							ttobj.setLanguage(Locale.UK);
+						}
+					}
+				});
+		pref = PreferenceManager.getDefaultSharedPreferences(this);
+		if (ttobj != null)
+			isMuted = pref.getBoolean(KEY_SPEECH, false);
+		supportInvalidateOptionsMenu();
+
 		// Initialize map
 		map = ((SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.mapfragment)).getMap();
@@ -310,15 +339,33 @@ public class DirectionActivity extends ActionBarActivity implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		if (ttobj != null) {
+			ttobj.stop();
+			ttobj.shutdown();
+		}
 	}
 
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// MenuInflater inflater = getMenuInflater();
-	// inflater.inflate(R.menu.menu_direction, menu);
-	// // toggleMapMenuItem = menu.findItem(R.id.menu_togglemap);
-	// return true;
-	// }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu_direction, menu);
+		// toggleMapMenuItem = menu.findItem(R.id.menu_togglemap);
+		if (isMuted) {
+			menu.findItem(R.id.menu_volume_on).setVisible(false);
+			menu.findItem(R.id.menu_volume_off).setVisible(true);
+		} else {
+			menu.findItem(R.id.menu_volume_on).setVisible(true);
+			menu.findItem(R.id.menu_volume_off).setVisible(false);
+		}
+		return true;
+	}
+
+	private void speakText(String str) {
+		if (!isMuted && ttobj != null) {
+			String toSpeak = str;
+			ttobj.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+		}
+	}
 
 	@Override
 	public void onClick(View sender) {
@@ -378,9 +425,17 @@ public class DirectionActivity extends ActionBarActivity implements
 		case android.R.id.home:
 			onBackPressed();
 			return true;
-		case R.id.menu_previous:
+		case R.id.menu_volume_off:
+			isMuted = false;
+			pref.edit().putBoolean(KEY_SPEECH, true).commit();
+			supportInvalidateOptionsMenu();
 			return true;
-		case R.id.menu_next:
+		case R.id.menu_volume_on:
+			if (ttobj != null)
+				ttobj.stop();
+			isMuted = true;
+			pref.edit().putBoolean(KEY_SPEECH, false).commit();
+			supportInvalidateOptionsMenu();
 			return true;
 			// case R.id.menu_togglemap:
 			// toggleMapAndList();
@@ -549,12 +604,16 @@ public class DirectionActivity extends ActionBarActivity implements
 	}
 
 	private void initSelectedStep(String txt1, String txt2) {
+		String str = "";
 		if (txt1 == null && txt2 == null) {
-			tvSelectedStep.setText(String.format(
-					getString(R.string.route_from_x_to_y), from, destination));
+			str = String.format(getString(R.string.route_from_x_to_y), from,
+					destination);
 		} else {
-			tvSelectedStep.setText(txt1 + ": " + txt2);
+			str = txt1 + ": " + txt2;
 		}
+
+		tvSelectedStep.setText(str);
+		speakText(str);
 
 	}
 

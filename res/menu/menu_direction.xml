@@ -1,4 +1,5 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <!-- <item -->
     <!-- android:id="@+id/menu_togglemap" -->
@@ -6,14 +7,16 @@
     <!-- android:showAsAction="ifRoom" -->
     <!-- android:title="@string/switchmaplist"/> -->
     <item
-        android:id="@+id/menu_previous"
-        android:icon="@drawable/ic_action_previous_item"
-        android:showAsAction="always|withText"
-        android:title="Previous"/>
+        android:id="@+id/menu_volume_on"
+        android:icon="@drawable/ic_action_volume_on"
+        android:orderInCategory="100"
+        android:title="Speech On"
+        app:showAsAction="always|withText"/>
     <item
-        android:id="@+id/menu_next"
-        android:icon="@drawable/ic_action_next_item"
-        android:showAsAction="always|withText"
-        android:title="Next"/>
+        android:id="@+id/menu_volume_off"
+        android:icon="@drawable/ic_action_volume_muted"
+        android:orderInCategory="100"
+        android:title="Speech Off"
+        app:showAsAction="always|withText"/>
 
 </menu>
