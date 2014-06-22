@@ -71,14 +71,13 @@ public class SelectOnMapActivity extends FragmentActivity implements
 			map.setLocationSource(locationFinder);
 			locationFinder.addLocationListener(this);
 
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtilities.convertToLatLng(City.CITIES[0].location), 13));
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+					LocationUtilities.convertToLatLng(City.CITIES[1].location),
+					11));
 			map.getUiSettings().setZoomControlsEnabled(true);
 			map.setOnInfoWindowClickListener(this);
 			map.setOnMapClickListener(this);
 			map.setOnMarkerClickListener(this);
-
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-					Constants.DEFAULT_LAT, Constants.DEFAULT_LNG), 11));
 		}
 	}
 

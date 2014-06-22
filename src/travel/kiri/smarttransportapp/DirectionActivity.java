@@ -195,7 +195,9 @@ public class DirectionActivity extends ActionBarActivity implements
 					LayoutInflater.from(this)));
 			map.setOnInfoWindowClickListener(this);
 			map.setOnMarkerClickListener(this);
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtilities.convertToLatLng(City.CITIES[0].location), 13));
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(
+					LocationUtilities.convertToLatLng(City.CITIES[1].location),
+					11));
 			map.getUiSettings().setZoomControlsEnabled(true);
 
 			previousImageButton.setOnClickListener(this);
@@ -279,9 +281,6 @@ public class DirectionActivity extends ActionBarActivity implements
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(
 						LocationUtilities.convertToLatLng(location),
 						Constants.DEFAULT_ZOOM));
-			} else {
-				map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-						Constants.DEFAULT_LAT, Constants.DEFAULT_LNG), 11));
 			}
 
 			allPointsBounds = LocationUtilities.detectBounds(allPoints);
