@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import travel.kiri.smarttransportapp.model.City;
+import travel.kiri.smarttransportapp.model.History;
 import travel.kiri.smarttransportapp.model.LocationFinder;
 import travel.kiri.smarttransportapp.model.MyLocationPoint;
 import travel.kiri.smarttransportapp.model.Place;
@@ -17,6 +18,7 @@ import travel.kiri.smarttransportapp.model.protocol.FindRouteResponseHandler;
 import travel.kiri.smarttransportapp.model.protocol.SearchPlaceResponseHandler;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -62,6 +64,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private LoadingDialog loadingDialog;
 	private TextView regionTextView;
 	private Button findButton;
+	private TextView historyTextView;
 
 	/** Keeps track of place search request not completed. */
 	private int pendingPlaceSearch;
@@ -79,6 +82,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private City cityDetected;
 	/** City selected manually, null means not selected yet (from detection). */
 	private City citySelected;
+
+	History history = new History();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +112,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		endpointEditText[ENDPOINT_FINISH] = (EditText) findViewById(R.id.toEditText);
 		regionTextView = (TextView) findViewById(R.id.regionTextView);
 		findButton = (Button) findViewById(R.id.findButton);
-
+		historyTextView = (TextView)findViewById(R.id.btn_history);
+		
 		for (int i = 0; i < endpointEditText.length; i++) {
 			endpointMyLocationButton[i].setOnClickListener(this);
 			endpointSelectOnMapButton[i].setOnClickListener(this);
@@ -144,8 +150,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		updateRegionTextView(citySelected);
 		regionTextView.setOnClickListener(this);
 		findButton.setOnClickListener(this);
-		
-		// Quick find
+		historyTextView.setOnClickListener(this);
+
+		// Quick find from my location
 		this.onClick(endpointMyLocationButton[ENDPOINT_START]);
 		endpointEditText[ENDPOINT_FINISH].requestFocus();
 	}
@@ -184,8 +191,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 					startActivityForResult(intent, i);
 				}
 			}
-
-			if (sender == findButton) {
+			if (sender.getId() == R.id.findButton) {
 				if (validateEmptyEditText(endpointEditText) == null) {
 					cancelled = false;
 					pendingPlaceSearch = 0;
@@ -204,8 +210,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 								regionCode = cityDetected.code;
 							} else {
 								Location lastLocation = LocationFinder
-										.getInstance()
-										.getLastKnownLocation();
+										.getInstance().getLastKnownLocation();
 								if (lastLocation == null) {
 									regionCode = City.CITIES[0].code;
 								} else {
@@ -243,8 +248,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 													endpointCopy
 															.setPlaces(places);
 													if (pendingPlaceSearch == 0) {
-														loadingDialog
-																.dismiss();
+														loadingDialog.dismiss();
 														showPlaceOptionsPickDialog();
 													}
 												} else {
@@ -266,6 +270,30 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 							Toast.LENGTH_SHORT);
 					toast.show();
 				}
+			} else if (sender.getId() == R.id.btn_history) {
+				if (history.getHistory().size() > 0) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					builder.setTitle(R.string.history);
+					final History.Adapter adapter = new History.Adapter(this,
+							history);
+					final Context context = this;
+					builder.setAdapter(adapter, new AlertDialog.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							History.Item selected = (History.Item) adapter
+									.getItem(which);
+							if (selected != null) {
+								DirectionActivity.startThisActivity(context,
+										selected.from, selected.to,
+										selected.adKeywords, selected.result);
+							}
+						}
+					});
+					builder.create().show();
+				} else {
+					Toast toast = Toast.makeText(this, R.string.no_data_in_history, Toast.LENGTH_LONG);
+					toast.show();
+				}
 			} else if (sender == regionTextView) {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setTitle(R.string.city);
@@ -281,7 +309,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 							updateRegionTextView(null);
 							saveStringPreference(PREF_REGION, null);
 						} else {
-							citySelected = (City)selected;
+							citySelected = (City) selected;
 							updateRegionTextView(citySelected);
 							saveStringPreference(PREF_REGION, citySelected.code);
 						}
@@ -331,6 +359,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 							loadingDialog.dismiss();
 							if (!cancelled) {
 								resetUIState();
+								history.addToHistory(new History.Item(start
+										.getEditTextRepresentation(), finish
+										.getEditTextRepresentation(),
+										adKeywords, route));
 								DirectionActivity.startThisActivity(activity,
 										start.getEditTextRepresentation(),
 										finish.getEditTextRepresentation(),
