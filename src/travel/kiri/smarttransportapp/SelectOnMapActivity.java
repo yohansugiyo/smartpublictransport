@@ -1,5 +1,6 @@
 package travel.kiri.smarttransportapp;
 
+import travel.kiri.smarttransportapp.model.City;
 import travel.kiri.smarttransportapp.model.LocationFinder;
 import travel.kiri.smarttransportapp.model.LocationUtilities;
 import travel.kiri.smarttransportapp.model.protocol.CicaheumLedengProtocol;
@@ -71,6 +72,8 @@ public class SelectOnMapActivity extends FragmentActivity implements
 			map.setLocationSource(locationFinder);
 			locationFinder.addLocationListener(this);
 
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtilities.convertToLatLng(City.CITIES[0].location), 13));
+			map.getUiSettings().setZoomControlsEnabled(true);
 			map.setOnInfoWindowClickListener(this);
 			map.setOnMapClickListener(this);
 			map.setOnMarkerClickListener(this);

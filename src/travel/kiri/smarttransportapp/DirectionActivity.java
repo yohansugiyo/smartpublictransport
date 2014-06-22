@@ -3,6 +3,7 @@ package travel.kiri.smarttransportapp;
 import java.util.ArrayList;
 import java.util.List;
 
+import travel.kiri.smarttransportapp.model.City;
 import travel.kiri.smarttransportapp.model.LocationFinder;
 import travel.kiri.smarttransportapp.model.LocationUtilities;
 import travel.kiri.smarttransportapp.model.Route;
@@ -195,7 +196,8 @@ public class DirectionActivity extends ActionBarActivity implements
 					LayoutInflater.from(this)));
 			map.setOnInfoWindowClickListener(this);
 			map.setOnMarkerClickListener(this);
-			map.getUiSettings().setZoomControlsEnabled(false);
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtilities.convertToLatLng(City.CITIES[0].location), 13));
+			map.getUiSettings().setZoomControlsEnabled(true);
 
 			previousImageButton.setOnClickListener(this);
 			nextImageButton.setOnClickListener(this);
