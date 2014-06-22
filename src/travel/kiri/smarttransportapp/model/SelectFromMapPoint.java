@@ -56,7 +56,9 @@ public class SelectFromMapPoint extends Point {
 		}
 		
 	     protected void onPostExecute(String result) {
-	         textualRepresentation = result;
+	    	 if (result != null) {
+	    		 textualRepresentation = result;
+	    	 }
 	     }
 	}
 }
