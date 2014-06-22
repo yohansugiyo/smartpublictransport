@@ -30,34 +30,37 @@
                 android:layout_height="wrap_content"
                 class="com.google.android.gms.maps.SupportMapFragment" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/layout_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="10dp"
                 android:background="@android:color/transparent"
                 android:orientation="horizontal" >
 
                 <ImageButton
                     android:id="@+id/imageButtonPrevious"
-                    android:layout_width="48dip"
-                    android:layout_height="48dip"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:background="@drawable/selector_bg_button_white"
                     android:contentDescription="@string/previous"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_prev" />
 
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="1dp" />
+
                 <ImageButton
                     android:id="@+id/imageButtonNext"
-                    android:layout_width="48dip"
-                    android:layout_height="48dip"
-                    android:layout_toRightOf="@+id/imageButtonPrevious"
+                    android:layout_width="40dip"
+                    android:layout_height="40dip"
+                    android:background="@drawable/selector_bg_button_white"
                     android:contentDescription="@string/next"
                     android:scaleType="fitXY"
                     android:src="@drawable/ic_next" />
-            </RelativeLayout>
+            </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout
@@ -75,7 +78,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="60dp"
                 android:padding="10dp"
-                android:text="Direction from x to y"
+                android:text="Loading..."
                 android:textColor="#000"
                 android:textSize="16sp" />
 

@@ -41,20 +41,23 @@
 
         <ImageButton
             android:id="@+id/imageButtonGpsFrom"
-            android:layout_width="48dip"
-            android:layout_height="48dip"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
             android:layout_alignTop="@+id/fromEditText"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/imageButtonMapPointFrom"
+            android:background="@drawable/selector_bg_button_white"
             android:contentDescription="@string/my_location"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_location" />
 
         <ImageButton
             android:id="@+id/imageButtonMapPointFrom"
-            android:layout_width="48dip"
-            android:layout_height="48dip"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/fromEditText"
+            android:background="@drawable/selector_bg_button_white"
             android:contentDescription="@string/select_from_map"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_action_map" />
@@ -87,20 +90,23 @@
 
         <ImageButton
             android:id="@+id/imageButtonGpsTo"
-            android:layout_width="48dip"
-            android:layout_height="48dip"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
             android:layout_alignTop="@+id/toEditText"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/imageButtonMapPointTo"
+            android:background="@drawable/selector_bg_button_white"
             android:contentDescription="@string/my_location"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_location" />
 
         <ImageButton
             android:id="@+id/imageButtonMapPointTo"
-            android:layout_width="48dip"
-            android:layout_height="48dip"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/toEditText"
+            android:background="@drawable/selector_bg_button_white"
             android:contentDescription="@string/select_from_map"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_action_map" />
@@ -127,26 +133,35 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <TextView
-        android:id="@+id/btn_settings"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
-        android:drawableLeft="@drawable/ic_action_settings"
-        android:gravity="center"
-        android:text="@string/settings"
-        android:textSize="16sp" />
+        android:layout_marginBottom="20dp" >
 
-     <TextView
-        android:id="@+id/btn_history"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
-        android:drawableLeft="@drawable/ic_action_settings"
-        android:gravity="center"
-        android:text="@string/history"
-        android:textSize="16sp" />   
-    
+        <TextView
+            android:id="@+id/btn_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_action_time"
+            android:gravity="center"
+            android:text="@string/history"
+            android:textColor="@color/selector_text_color"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="1dp" />
+
+        <TextView
+            android:id="@+id/btn_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_action_settings"
+            android:gravity="center"
+            android:text="@string/settings"
+            android:textColor="@color/selector_text_color"
+            android:textSize="16sp" />
+    </LinearLayout>
+
 </LinearLayout>

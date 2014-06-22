@@ -75,7 +75,9 @@ public class DirectionActivity extends ActionBarActivity implements
 
 	private static int BOUNDS_PADDING = 70;
 
-	SlidingUpPanelLayout slidingUpLayout;
+	private SlidingUpPanelLayout slidingUpLayout;
+
+	private RouteAdapter stepAdapter;
 
 	private GoogleMap map;
 	private Route route;
@@ -134,7 +136,8 @@ public class DirectionActivity extends ActionBarActivity implements
 		adKeywords = intent.getStringArrayListExtra(EXTRA_ADKEYWORDS);
 
 		// Setup list
-		stepListView.setAdapter(new RouteAdapter(this, route, this));
+		stepAdapter = new RouteAdapter(this, route, this);
+		stepListView.setAdapter(stepAdapter);
 		stepListView.setOnItemClickListener(this);
 
 		request = new CicaheumLedengProtocol(this, this);
@@ -246,9 +249,12 @@ public class DirectionActivity extends ActionBarActivity implements
 							markerResponseHandler);
 				}
 				if (i == iLength - 1) {
-					initialMarker = new MarkerOptions().position(
-							step.path.get(step.path.size() - 1)).title(
-							destination).snippet(resources.getString(R.string.you_have_reached));
+					initialMarker = new MarkerOptions()
+							.position(step.path.get(step.path.size() - 1))
+							.title(destination)
+							.snippet(
+									resources
+											.getString(R.string.you_have_reached));
 					markers.add(map.addMarker(initialMarker));
 					request.getFinishMarker(initialMarker,
 							new MarkerOptionsResponseHandler() {
@@ -354,14 +360,13 @@ public class DirectionActivity extends ActionBarActivity implements
 				cameraUpdate = CameraUpdateFactory.newLatLngBounds(
 						allPointsBounds, BOUNDS_PADDING);
 				initSelectedStep(null, null);
-				stepListView.setSelection(0);
 			} else {
 				cameraUpdate = CameraUpdateFactory.newLatLngZoom(
 						markers.get(selectedMarker).getPosition(), FOCUS_ZOOM);
 				markers.get(selectedMarker).showInfoWindow();
 				initSelectedStep(markers.get(selectedMarker).getTitle(),
 						markers.get(selectedMarker).getSnippet());
-				stepListView.setSelection(selectedMarker);
+				stepListView.setItemChecked(selectedMarker, true);
 			}
 			map.animateCamera(cameraUpdate);
 			slidingUpLayout.collapsePane();
